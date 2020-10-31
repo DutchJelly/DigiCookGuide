@@ -1,12 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
+import RecipeGuide from './Components/RecipeGuide';
+
+let recipe = {
+  steps: [],
+  ingredients: [],
+  author: "Jelle",
+  difficulty: 5
+} as Recipe
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <RecipeGuide recipe={recipe}/>
   </React.StrictMode>,
   document.getElementById('root')
 );

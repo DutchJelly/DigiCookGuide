@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import RecipeGuide from './Components/RecipeGuide';
+import RecipeGuide from './Components/recipeguide/RecipeGuide';
 
 let recipe = {
   steps: [],

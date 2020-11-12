@@ -1,11 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import reportWebVitals from './reportWebVitals';
 import RecipeGuide from './Components/recipeguide/RecipeGuide';
 
+import './assets/main.css'
+
 let recipe = {
-  steps: [],
+  steps: [{ 
+      instruction: 'Cut the carrots in pieces of approximately 4 millimeters.',
+      counter: 0,
+      image: 'https://static01.nyt.com/images/2016/05/03/dining/03COOKING-KNIFESKILLS1/03COOKING-KNIFESKILLS1-square640.jpg'
+    },{
+      instruction: 'Cut some more carrets ;)',
+      counter: 0,
+      image: 'https://static01.nyt.com/images/2016/05/03/dining/03COOKING-KNIFESKILLS1/03COOKING-KNIFESKILLS1-square640.jpg'
+    }
+  ],
   ingredients: [],
   author: "Jelle",
   difficulty: 5

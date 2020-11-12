@@ -1,10 +1,19 @@
 /// <reference types="react-scripts" />
 
+interface MentalNote {
+
+}
+
+interface Timer {
+
+}
 
 interface RecipeStep {
     instruction: String,
-    counter: Number,
-    image: Url
+    id: Number,
+    image: Url,
+    mentalNotes: MentalNote[],
+    timers: Timer[]
 }
 
 interface Recipe {

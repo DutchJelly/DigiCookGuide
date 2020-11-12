@@ -14,6 +14,8 @@ type RecipeGuideProps = {
 export default function RecipeGuide(props: RecipeGuideProps){
     
     const [currentStep, setCurrentStep] = useState(0);
+    const [mentalNotes, setMentalNotes] = useState(Array<MentalNote>());
+    const [timers, setTimers] = useState(Array<Timer>());
 
     let scroll = (x:number) => setCurrentStep(currentStep + x);
 
@@ -36,7 +38,6 @@ export default function RecipeGuide(props: RecipeGuideProps){
                     <div className="instructionTextWrapper">
                         {props.recipe.steps[currentStep].instruction}
                     </div>
-                    {/* <RecipeInstruction {...props.recipe.steps[currentStep]}/> */}
                 </div>
                 
                 <div className="guideMenu" style={{gridArea: "guideMenu"}}>

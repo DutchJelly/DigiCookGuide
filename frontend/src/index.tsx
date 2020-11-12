@@ -8,12 +8,16 @@ import './assets/main.css'
 let recipe = {
   steps: [{ 
       instruction: 'Cut the carrots in pieces of approximately 4 millimeters.',
-      counter: 0,
-      image: 'https://static01.nyt.com/images/2016/05/03/dining/03COOKING-KNIFESKILLS1/03COOKING-KNIFESKILLS1-square640.jpg'
+      id: 0,
+      image: 'https://static01.nyt.com/images/2016/05/03/dining/03COOKING-KNIFESKILLS1/03COOKING-KNIFESKILLS1-square640.jpg',
+      mentalNotes: [],
+      timers: [],
     },{
       instruction: 'Cut some more carrets ;)',
-      counter: 0,
-      image: 'https://static01.nyt.com/images/2016/05/03/dining/03COOKING-KNIFESKILLS1/03COOKING-KNIFESKILLS1-square640.jpg'
+      id: 1,
+      image: 'https://static01.nyt.com/images/2016/05/03/dining/03COOKING-KNIFESKILLS1/03COOKING-KNIFESKILLS1-square640.jpg',
+      mentalNotes: [],
+      timers: [],
     }
   ],
   ingredients: [],

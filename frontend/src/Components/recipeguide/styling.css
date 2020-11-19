@@ -35,11 +35,24 @@
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-.aside h1{
+.asideContainer{
+    width: 80%;
+    min-width: 200px;
+    margin: 0 auto;
+}
+
+.asideContainer h1{
     color: #E8411B;
     text-align: center;
     font-weight: normal;
     font-size: 2rem;
+}
+
+.asideContainer h2{
+    text-align: left;
+    font-weight: normal;
+    font-size: 1.8rem;
+    margin-top: 2rem;
 }
 
 .guideMenu{
@@ -120,4 +133,43 @@ button:focus{
     width: 80%;
     margin: 0 auto;
 
+}
+
+.mentalNote{
+    width: 95%;
+    min-width: 200px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.notePrefix{
+    color:  #E8411B;
+    font-size: 1.3rem;
+}
+
+.noteText{
+    font-size: 1.3rem;
+}
+
+.recipeTimer{
+    width: 95%;
+    min-width: 200px;
+    margin: 0 auto;
+    padding: 1rem;
+    /* background-color: white;
+    border-radius: 1rem; */
+}
+
+.timerText{
+    font-size: 1.3rem;
+    color: rgb(37, 37, 37);
+}
+
+.timerValue{
+    font-size: 1.3rem;
+}
+
+.timerValPrefix{
+    color:  #E8411B;
+    font-size: 1.3rem;
 }

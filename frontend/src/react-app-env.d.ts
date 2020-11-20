@@ -12,13 +12,24 @@ interface Timer {
     important: boolean //if the timer finishes, and this is true, it'll get priority over other instructions
 }
 
+interface UserFeedback {
+    command: string,
+    note: string,
+    pendingInstructionId: number, //the instruction that the timer will execute when finished
+    important: boolean,
+}
+
 interface RecipeStep {
     instruction: String,
     id: number,
+    dependsOn: number,
     image: Url,
     mentalNotes: MentalNote[], //Notes for stuff like 'keep stiring in the pan until x'
-    timers: Timer[] //timers that will run after the instruction until some instruction
+    timers: Timer[], //timers that will run after the instruction until some instruction
+    feedbacks: UserFeedback[] //instructions that depend on user feedback
 }
+
+
 
 interface Recipe {
     steps: RecipeStep[],

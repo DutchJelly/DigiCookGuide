@@ -70,20 +70,78 @@ function Timer(props: {timer: Timer, callback: (t: Timer) => any}){
 
 }
 
+function UserFeedback(props: {userFeedback: UserFeedback, callback: (f: UserFeedback) => any}){
+
+    return(
+        <div className="userFeedback">
+            <div className="feedbackText">{props.userFeedback.note}</div>
+            <button onClick={() => props.callback(props.userFeedback)} className="userFeedbackBtn">{props.userFeedback.command}</button>
+        </div>
+    );
+}
+
 export default function RecipeGuide(props: RecipeGuideProps){
     
     const [currentStep, setCurrentStep] = useState(0);
     const [mentalNotes, setMentalNotes] = useState(Array<MentalNote>());
     const [timers, setTimers] = useState(Array<Timer>());
+    const [finishedTimers, setFinishedTimers] = useState(Array<Timer>());
+    const [feedbacks, setFeedbacks] = useState(Array<UserFeedback>());
+    const [finishedFeedbacks, setFinishedFeedbacks] = useState(Array<UserFeedback>());
+    const [isBlocked, setIsBlocked] = useState(false);
 
     //Copy steps array so we can change the order without changing the order of the original recipe.
-    let [steps, setSteps] = useState([...props.recipe.steps]);
+    //The steps array will always be split in 2 parts: the left part are the finished instructions, and the right part are the unfinished ones.
+    const [steps, setSteps] = useState([...props.recipe.steps]);
 
-
-    const isTimerDependant = (instructionId: number) => {
-        return timers.find(x => x.pendingInstructionId === instructionId);
+    //Look if the instruction needs to wait for a timer to finish.
+    const isTimerDependant = (instructionId: number, lastExecutedInstructionIndex: number) => {
+        if(timers.find(x => x.pendingInstructionId === instructionId))
+            return true;
+        
+        //now check timers that haven't ran yet, aka they're to the right of the last executed in the queue.
+        for(let i = lastExecutedInstructionIndex+1; i < steps.length; i++){
+            if(steps[i].timers.find(x => x.pendingInstructionId === instructionId))
+                return true;
+        }
+        return false;
     }
 
+    //Look if the instruction needs to wait for user feedback.
+    const isFeedbackDependent = (instructionId: number, lastExecutedInstructionIndex: number) => {
+        if(feedbacks.find(x => x.pendingInstructionId === instructionId))
+            return true;
+
+        //now check feedbacks that haven't ran yet, aka they're to the right of the last executed in the queue.
+        for(let i = lastExecutedInstructionIndex+1; i < steps.length; i++){
+            if(steps[i].feedbacks.find(x => x.pendingInstructionId === instructionId))
+                return true;
+        }
+        return false;
+    }
+
+    //Look if the instruction is currently directly dependent on one of the previous instructions.
+    const isDirectlyDependent = (instructionId: number, lastExecutedInstructionIndex: number) => {
+        let instruction = steps.find(x => x.id === instructionId);
+        if(!instruction) {
+            console.error(`Cannot find if instruction is directly dependent because no instruction with id ${instructionId} exists.`);
+            return false;
+        }
+        if(instruction.id === instruction.dependsOn) return false;
+
+        let dependancy = steps.findIndex(x => x.id === instruction?.dependsOn);
+        if(dependancy === -1) {
+            console.error(`Cannot find direct dependancy [${instruction.dependsOn}] of instruction [${instructionId}].`);
+            return false;
+        }
+        return dependancy > lastExecutedInstructionIndex;
+    }
+
+    const isDependent = (instructionId: number, lastExecutedInstructionIndex: number) => {
+        return isDirectlyDependent(instructionId, lastExecutedInstructionIndex) || isFeedbackDependent(instructionId, lastExecutedInstructionIndex) || isTimerDependant(instructionId, lastExecutedInstructionIndex);
+    }
+
+    //TODO fix this; it won't work because timers never contains finished timers.
     const isTimerImportant = (instructionId: number) => {
         let corrospondingTimer = timers.find(x => x.pendingInstructionId === instructionId);
         return corrospondingTimer && corrospondingTimer.important;
@@ -108,7 +166,9 @@ export default function RecipeGuide(props: RecipeGuideProps){
 
     const scroll = (x:number) => {
 
+        console.log(steps);
         //When scrolling backwards, we don't want to update mental notes or timers, those keep going.
+        //TODO: think of whether it is logical to just remove the timers when you go back..
         if(x < 0){
             setCurrentStep(currentStep + x);
             return;
@@ -116,21 +176,23 @@ export default function RecipeGuide(props: RecipeGuideProps){
 
         let recipeStep = steps[currentStep];
         
-        //If a timer is waiting for the instruction that we want to scroll to, we find an instruction that is not 'timer dependant'.
-        let timerIndepInstrOff = x;
-        while(currentStep + timerIndepInstrOff < steps.length && isTimerDependant(steps[currentStep + timerIndepInstrOff].id))
-            timerIndepInstrOff++;
-        if(currentStep + timerIndepInstrOff === steps.length){
-            //There is no instruction that we can manually do: we need to wait for a timer to finish.
-            return;
-        }
-        //If the original offset was timer dependent, we need to change the order of the recipe steps.
-        if(timerIndepInstrOff !== x){
-            swabSteps(currentStep + x, currentStep + timerIndepInstrOff);
-        }
         
 
-        //Add timers and mental notes of instruction that's scrolled past.
+        //Add timers, mental notes and feedback waiters of instruction that's scrolled past.
+        //This code can be cleaned up with a more OO approach and a generic function like:
+        // const addRecipeProperty = (args: UserFeedback[] | MentalNote[] | Timer[], to: UserFeedback[] | MentalNote[] | Timer[]) => { }
+
+        if(recipeStep.feedbacks.length){
+            let stateChanged = false;
+            recipeStep.feedbacks.forEach(feedback => {
+                if(!feedbacks.includes(feedback)){
+                    feedbacks.push(feedback);
+                    stateChanged = true;
+                }
+                    
+            });
+            if(stateChanged) setFeedbacks([...feedbacks]);
+        }
         if(recipeStep.mentalNotes.length){
             let stateChanged = false;
             recipeStep.mentalNotes.forEach(note => {
@@ -140,8 +202,7 @@ export default function RecipeGuide(props: RecipeGuideProps){
                 }
                     
             });
-            if(stateChanged)
-                setMentalNotes(mentalNotes);
+            if(stateChanged) setMentalNotes([...mentalNotes]);
         }
         if(recipeStep.timers.length){
             let stateChanged = false;
@@ -152,15 +213,25 @@ export default function RecipeGuide(props: RecipeGuideProps){
                 }
                 
             });
-            if(stateChanged)
-                setTimers(timers);
+            if(stateChanged) setTimers([...timers]);
         }
 
-        //We could remove mental notes that are not pending any more from the state, but we're dynamically just looking at
-        //the pending instruction id to render the note, so it's not neccesary.
 
+        //If a timer is waiting for the instruction that we want to scroll to, we find an instruction that is not 'timer dependant'.
+        let indepInstrOffset = x;
+        while(currentStep + indepInstrOffset < steps.length && isDependent(steps[currentStep+indepInstrOffset].id, currentStep))
+            indepInstrOffset++;
+        if(currentStep + indepInstrOffset === steps.length){
+            //There is no instruction that we can do; a timer needs to finish or feedback needs to be given.
+            setIsBlocked(true);
+            return;
+        }
+        //If the original offset was dependent, we need to change the order to make the independent one the next one.
+        if(indepInstrOffset !== x){
+            swabSteps(currentStep + x, currentStep + indepInstrOffset);
+        }
+        if(isBlocked) setIsBlocked(false);
         setCurrentStep(currentStep + x);
-
     }
 
     const getProgressPercentage = () => {
@@ -175,15 +246,55 @@ export default function RecipeGuide(props: RecipeGuideProps){
         if(pendingInstructionIndex === -1) {
             console.error(`no pending instruction was found for id ${t.pendingInstructionId}`);
             setTimers(timers.filter(x => x !== t));
+            setFinishedTimers([...finishedTimers, t]);
             return;
         }
 
-        if(t.important && isTimerImportant(steps[pendingInstructionIndex].id))
+        //If the user couldn't scroll further, the user actually completed the step, so we don't swab it forwards again.
+        //Also, if the current step is the one that actually started the timer that finished, we also know that it doesn't need to be swabbed forwards.
+        if(isBlocked || steps[currentStep].timers.includes(t)){
+            insertStep(pendingInstructionIndex, currentStep+1);
+            setCurrentStep(currentStep+1);   
+            setTimers(timers.filter(x => x !== t));
+            setFinishedTimers([...finishedTimers, t]);
+            return;
+        }
+       
+        if(t.important && !isTimerImportant(steps[pendingInstructionIndex].id))
             insertStep(pendingInstructionIndex, currentStep);
         else 
             insertStep(pendingInstructionIndex, currentStep+1);
         
         setTimers(timers.filter(x => x !== t));
+        setFinishedTimers([...finishedTimers, t]);
+    }
+
+    const handleFeedback = (f: UserFeedback) => {
+        let pendingInstructionIndex = steps.findIndex(x => x.id === f.pendingInstructionId);
+        if(pendingInstructionIndex === -1) {
+            console.error(`no pending instruction was found for id ${f.pendingInstructionId}`);
+            setFeedbacks(feedbacks.filter(x => x !== f));
+            setFinishedFeedbacks([...finishedFeedbacks, f]);
+            return;
+        }
+
+        //If the user couldn't scroll further, the user actually completed the step, so we don't swab it forwards again.
+        //Or if the current instruction is the one that actually started the feedback awaiting.
+        if(isBlocked || steps[currentStep].feedbacks.includes(f)){
+            insertStep(pendingInstructionIndex, currentStep+1);
+            setCurrentStep(currentStep+1);   
+            setFeedbacks(feedbacks.filter(x => x !== f));
+            setFinishedFeedbacks([...finishedFeedbacks, f]);
+            return;
+        }
+       
+        if(f.important)
+            insertStep(pendingInstructionIndex, currentStep);
+        else 
+            insertStep(pendingInstructionIndex, currentStep+1);
+        
+        setFeedbacks(feedbacks.filter(x => x !== f));
+        setFinishedFeedbacks([...finishedFeedbacks, f]);
     }
 
 
@@ -218,6 +329,9 @@ export default function RecipeGuide(props: RecipeGuideProps){
                     <h2>Timers</h2>
                     {timers.length} currently running
                     {timers.map(timer => <Timer timer={timer} callback={handleTimerFinish}/>)}
+                    <h2>Awaiting Feedback</h2>
+                    {feedbacks.length} currently waiting
+                    {feedbacks.map(feedback => <UserFeedback userFeedback={feedback} callback={handleFeedback}/>)}
                     <h2>Mental Notes</h2>
                     {mentalNotes.map(note => <MentalNote mentalNote={note} allSteps={steps} currentInstructionIndex={currentStep}/>)}
                 </div>

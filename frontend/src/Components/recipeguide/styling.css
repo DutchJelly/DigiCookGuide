@@ -173,3 +173,22 @@ button:focus{
     color:  #E8411B;
     font-size: 1.3rem;
 }
+
+.userFeedback{
+    width: 95%;
+    min-width: 200px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.feedbackText{
+    font-size: 1.3rem;
+    color: rgb(37, 37, 37);
+}
+
+.userFeedbackBtn{
+    width: 50%;
+    height: 1.3rem;
+    background-color: #E8411B;
+    font-size: 1rem;
+}

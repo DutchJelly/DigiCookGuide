@@ -29,6 +29,37 @@
     left: 0;
 }
 
+.voiceControl{
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 400px;
+    height: 40px;
+    border-bottom-right-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+    background-color: black;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    padding: 0.2rem 1rem 1rem 1rem;
+}
+
+.voiceControl>h2{
+    color: white;
+    font-size: 1.2rem;
+    display: inline;
+}
+
+.toggleVoice{
+    padding: 0.2rem;
+    border-radius: 0.1rem;
+    background-color: white;
+}
+
+.voiceControl .feedback{
+    margin-left: 0.8rem;
+    color: white;
+}
+
+
 .aside{
     background-color: #F0EEEB;
     min-width: 200px;
@@ -73,6 +104,10 @@
     min-width: 100px;
     background-color: #535C27;
     color: #F0EEEB;
+}
+
+.scrollButton:hover{
+    background-color: #3f461e;
 }
 
 button:focus{
@@ -187,8 +222,17 @@ button:focus{
 }
 
 .userFeedbackBtn{
-    width: 50%;
-    height: 1.3rem;
+    width: 75%;
+    height: 3rem;
+    padding: 0.2rem;
+    min-width: 180px;
+    border-radius: 1rem;
+    margin: 1rem;
     background-color: #E8411B;
-    font-size: 1rem;
+    font-size: 1.5rem;
+    color: white;
+}
+
+.userFeedbackBtn:hover{
+    background-color: #942a12;
 }

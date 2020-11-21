@@ -1,6 +1,7 @@
 
 import { notStrictEqual } from 'assert'
 import React, {useState, useEffect, ReactNode, Children} from 'react'
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 import DisableableBtn from '../util/DisableableBtn'
 import RecipeInstruction from './RecipeInstruction'
 
@@ -85,10 +86,44 @@ export default function RecipeGuide(props: RecipeGuideProps){
     const [currentStep, setCurrentStep] = useState(0);
     const [mentalNotes, setMentalNotes] = useState(Array<MentalNote>());
     const [timers, setTimers] = useState(Array<Timer>());
-    const [finishedTimers, setFinishedTimers] = useState(Array<Timer>());
     const [feedbacks, setFeedbacks] = useState(Array<UserFeedback>());
-    const [finishedFeedbacks, setFinishedFeedbacks] = useState(Array<UserFeedback>());
     const [isBlocked, setIsBlocked] = useState(false);
+
+    const [voiceEnabled, setVoiceEnabled] = useState(true);
+    const [voiceFeedback, setVoiceFeedback] = useState("");
+
+    const staticCommands = [{
+            command: "go next",
+            callback: () => {
+                console.log('command is executed');
+                scroll(1);
+                resetTranscript();
+            },
+            matchInterim: true
+        },{
+            command: "go previous",
+            callback: () => {
+                console.log('command is executed');
+                scroll(-1);
+                resetTranscript();
+            },
+            matchInterim: true
+        }
+    ];
+
+    useEffect(() => {
+        if(voiceEnabled){
+            SpeechRecognition.startListening({ language: 'en-US', continuous: true });
+            if(!SpeechRecognition.browserSupportsSpeechRecognition()){
+                setVoiceFeedback("browser does not support voice commands");
+            }
+        }
+        else SpeechRecognition.stopListening();
+    }, [voiceEnabled]);
+    
+    const {transcript, resetTranscript} = useSpeechRecognition({commands: staticCommands});
+
+
 
     //Copy steps array so we can change the order without changing the order of the original recipe.
     //The steps array will always be split in 2 parts: the left part are the finished instructions, and the right part are the unfinished ones.
@@ -165,6 +200,9 @@ export default function RecipeGuide(props: RecipeGuideProps){
     }
 
     const scroll = (x:number) => {
+
+        if(currentStep+x < 0 || currentStep+x >= steps.length)
+            return;
 
         console.log(steps);
         //When scrolling backwards, we don't want to update mental notes or timers, those keep going.
@@ -246,7 +284,6 @@ export default function RecipeGuide(props: RecipeGuideProps){
         if(pendingInstructionIndex === -1) {
             console.error(`no pending instruction was found for id ${t.pendingInstructionId}`);
             setTimers(timers.filter(x => x !== t));
-            setFinishedTimers([...finishedTimers, t]);
             return;
         }
 
@@ -256,7 +293,6 @@ export default function RecipeGuide(props: RecipeGuideProps){
             insertStep(pendingInstructionIndex, currentStep+1);
             setCurrentStep(currentStep+1);   
             setTimers(timers.filter(x => x !== t));
-            setFinishedTimers([...finishedTimers, t]);
             return;
         }
        
@@ -266,7 +302,6 @@ export default function RecipeGuide(props: RecipeGuideProps){
             insertStep(pendingInstructionIndex, currentStep+1);
         
         setTimers(timers.filter(x => x !== t));
-        setFinishedTimers([...finishedTimers, t]);
     }
 
     const handleFeedback = (f: UserFeedback) => {
@@ -274,7 +309,6 @@ export default function RecipeGuide(props: RecipeGuideProps){
         if(pendingInstructionIndex === -1) {
             console.error(`no pending instruction was found for id ${f.pendingInstructionId}`);
             setFeedbacks(feedbacks.filter(x => x !== f));
-            setFinishedFeedbacks([...finishedFeedbacks, f]);
             return;
         }
 
@@ -284,7 +318,6 @@ export default function RecipeGuide(props: RecipeGuideProps){
             insertStep(pendingInstructionIndex, currentStep+1);
             setCurrentStep(currentStep+1);   
             setFeedbacks(feedbacks.filter(x => x !== f));
-            setFinishedFeedbacks([...finishedFeedbacks, f]);
             return;
         }
        
@@ -294,14 +327,23 @@ export default function RecipeGuide(props: RecipeGuideProps){
             insertStep(pendingInstructionIndex, currentStep+1);
         
         setFeedbacks(feedbacks.filter(x => x !== f));
-        setFinishedFeedbacks([...finishedFeedbacks, f]);
     }
 
 
     return(
         <div className="guide">
             <button className="exitBtn rounded-br">Exit Recipe Guide</button>
+
+            <div className="voiceControl">
+                <h2>Voice support: </h2>
+                <button onClick={() => setVoiceEnabled(!voiceEnabled)}className="toggleVoice">{voiceEnabled ? "enabled" : "disabled"}</button>
+                <span className="feedback">
+                    {transcript.split(" ").splice(-1)}
+                </span>
+            </div>
+            
         
+
             <div className="main" style={{gridArea: "main"}}>
                 <div className="instructions" style={{gridArea: "instructions"}}>
                     <div className="instructionImageWrapper">

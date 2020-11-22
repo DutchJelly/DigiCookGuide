@@ -14,7 +14,7 @@ let recipe = {
       mentalNotes: [],
       timers: [],
       feedbacks: [{
-        command: 'water is cooking',
+        command: 'cooking water',
         note: 'Als het water kookt, klik dan op de knop of zeg het commando.',
         pendingInstructionId: 2,
         important: true,
@@ -59,7 +59,7 @@ let recipe = {
       mentalNotes: [],
       timers: [],
       feedbacks: [{
-        command: 'bacon is cooked',
+        command: 'bacon is done',
         note: 'Als de spekjes mooi krokant zijn gebakken (niet helemaal afgebakken), klik dan op de knop of activeer hem met het voice commando.',
         pendingInstructionId: 5,
         important: true,

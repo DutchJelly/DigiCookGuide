@@ -1,9 +1,7 @@
 
-import { notStrictEqual } from 'assert'
-import React, {useState, useEffect, ReactNode, Children} from 'react'
+import React, {useState, useEffect} from 'react'
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 import DisableableBtn from '../util/DisableableBtn'
-import RecipeInstruction from './RecipeInstruction'
 
 import './styling.css'
 
@@ -93,7 +91,7 @@ export default function RecipeGuide(props: RecipeGuideProps){
     const [voiceFeedback, setVoiceFeedback] = useState("");
 
     const staticCommands = [{
-            command: "go next",
+            command: "next instruction",
             callback: () => {
                 console.log('command is executed');
                 scroll(1);
@@ -101,7 +99,7 @@ export default function RecipeGuide(props: RecipeGuideProps){
             },
             matchInterim: true
         },{
-            command: "go previous",
+            command: "previous instruction",
             callback: () => {
                 console.log('command is executed');
                 scroll(-1);
@@ -110,6 +108,37 @@ export default function RecipeGuide(props: RecipeGuideProps){
             matchInterim: true
         }
     ];
+
+    props.recipe.steps.forEach(x => {
+        x.feedbacks.forEach(y => {
+            staticCommands.push({
+                command: y.command,
+                callback: () => {
+                    if(!feedbacks.includes(y)) return;
+                    handleFeedback(y);
+                    resetTranscript();
+                },
+                matchInterim: true
+            })
+        })
+    });
+
+    // useEffect(() => {
+    //     steps.forEach(x => {
+    //         x.feedbacks.forEach(y => {
+    //             staticCommands.push({
+    //                 command: y.command,
+    //                 callback: () => {
+    //                     if(!feedbacks.includes(y)) return;
+    //                     handleFeedback(y);
+    //                     resetTranscript();
+    //                 },
+    //                 matchInterim: true
+    //             })
+    //         })
+    //     })
+    // }, []);
+
 
     useEffect(() => {
         if(voiceEnabled){
@@ -355,14 +384,14 @@ export default function RecipeGuide(props: RecipeGuideProps){
                 </div>
                 
                 <div className="guideMenu" style={{gridArea: "guideMenu"}}>
-                    <DisableableBtn className="scrollButton rounded-tr" cb={() => scroll(-1)} clickable={currentStep > 0}>Previous</DisableableBtn>
+                    <DisableableBtn className="scrollButton rounded-tr" cb={() => scroll(-1)} clickable={currentStep > 0}>Previous<br/>Instruction</DisableableBtn>
                     <div className="progressbarWrapper">
                         <div className="progressbarOutline">
                             <div className="progressbarFiller" style={{width: `${getProgressPercentage()}%`}}/>
                             <div className="progressText">{currentStep + 1}/{steps.length}</div>
                         </div>
                     </div>
-                    <DisableableBtn className="scrollButton rounded-tl" cb={() => scroll(1)} clickable={currentStep < steps.length-1}>Next</DisableableBtn>
+                    <DisableableBtn className="scrollButton rounded-tl" cb={() => scroll(1)} clickable={currentStep < steps.length-1}>Next<br/>Instruction</DisableableBtn>
                 </div>
             </div>
             <div className="aside" style={{gridArea: "aside"}}>

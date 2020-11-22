@@ -17,7 +17,7 @@ function MentalNote(props: {mentalNote: MentalNote, allSteps: RecipeStep[], curr
         console.error(`mental note has a non-existing pending instruction property: id(${props.mentalNote.pendingInstructionId})`);
         // return null; TODO change this back
     }
-    else if(pendingInstructionIndex <= props.currentInstructionIndex)
+    else if(pendingInstructionIndex < props.currentInstructionIndex)
         return null;
     return(
         <div className="mentalNote">

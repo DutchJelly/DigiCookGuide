@@ -375,8 +375,8 @@ export default function RecipeGuide(props: RecipeGuideProps){
 
             <div className="main" style={{gridArea: "main"}}>
                 <div className="instructions" style={{gridArea: "instructions"}}>
-                    <div className="instructionImageWrapper">
-                        <img src={steps[currentStep].image} alt=""/>
+                    <div className="instructionImageWrapper" style={{backgroundImage: `url(${steps[currentStep].image})`}}>
+                        {/* <img src={steps[currentStep].image} alt=""/> */}
                     </div>
                     <div className="instructionTextWrapper">
                         {steps[currentStep].instruction}

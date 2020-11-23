@@ -79,6 +79,34 @@ function UserFeedback(props: {userFeedback: UserFeedback, callback: (f: UserFeed
     );
 }
 
+function CommandFeedback(props: {command: string | null | undefined, delay: number}){
+    const [show, setShow] = useState(false);
+    useEffect(() => {
+        if(!props.command || props.command === '') {
+            if(show) setShow(false);
+            return;
+        }
+        setShow(true);
+        let interval = setInterval(() => {
+            setShow(false);
+        }, props.delay);
+
+        return () => {
+            clearInterval(interval);
+            if(show) setShow(false);
+        }
+        
+    }, [props.command]);
+
+    if(!show) return null;
+
+    return (
+        <div className="commandFeedback">
+            {props.command}
+        </div>
+    )
+}
+
 export default function RecipeGuide(props: RecipeGuideProps){
     
     const [currentStep, setCurrentStep] = useState(0);
@@ -89,6 +117,7 @@ export default function RecipeGuide(props: RecipeGuideProps){
 
     const [voiceEnabled, setVoiceEnabled] = useState(true);
     const [voiceFeedback, setVoiceFeedback] = useState("");
+    const [executedCmd, setExecutedCmd] = useState('');
 
     const staticCommands = [{
             command: "next instruction",
@@ -96,6 +125,8 @@ export default function RecipeGuide(props: RecipeGuideProps){
                 console.log('command is executed');
                 scroll(1);
                 resetTranscript();
+                setExecutedCmd('');
+                setExecutedCmd('next instruction');
             },
             matchInterim: true
         },{
@@ -104,6 +135,8 @@ export default function RecipeGuide(props: RecipeGuideProps){
                 console.log('command is executed');
                 scroll(-1);
                 resetTranscript();
+                setExecutedCmd('');
+                setExecutedCmd('previous instruction');
             },
             matchInterim: true
         }
@@ -117,6 +150,8 @@ export default function RecipeGuide(props: RecipeGuideProps){
                     if(!feedbacks.includes(y)) return;
                     handleFeedback(y);
                     resetTranscript();
+                    setExecutedCmd('');
+                    setExecutedCmd(y.command);
                 },
                 matchInterim: true
             })
@@ -371,6 +406,7 @@ export default function RecipeGuide(props: RecipeGuideProps){
                 </span>
             </div>
             
+            <CommandFeedback command={executedCmd} delay={750}/>
         
 
             <div className="main" style={{gridArea: "main"}}>

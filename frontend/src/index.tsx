@@ -27,7 +27,7 @@ let recipe = {
       mentalNotes: [],
       timers: [{
         note: 'Kook de spaghetti.',
-        durationSeconds: 20,
+        durationSeconds: 600,
         pendingInstructionId: 3,
         important: true,
       }],

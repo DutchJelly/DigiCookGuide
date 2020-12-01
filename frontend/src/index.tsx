@@ -7,7 +7,7 @@ import './assets/main.css'
 
 let recipe = {
   steps: [{
-      instruction: 'Zet een pan met ongeveer 400ml water op het vuur.',
+      instruction: 'Zet een pan die ongeveer 3/4 gevuld is met water op het vuur.',
       id: 0,
       dependsOn: 0,
       image: 'https://denverwatertap.org/wp-content/uploads/2017/12/boiling-water-flickrcommons-Scott-Ackerman.jpg',
@@ -23,7 +23,7 @@ let recipe = {
       instruction: 'Doe de spaghetti in het kokende water.',
       id: 2,
       dependsOn: 2,
-      image: 'https://static01.nyt.com/images/2016/05/03/dining/03COOKING-KNIFESKILLS1/03COOKING-KNIFESKILLS1-square640.jpg',
+      image: 'https://www.todayifoundout.com/wp-content/uploads/2014/01/cooking-pasta.jpg',
       mentalNotes: [],
       timers: [{
         note: 'Kook de spaghetti.',
@@ -68,14 +68,22 @@ let recipe = {
       instruction: 'Bak de knoflook en peterselie kort mee met de spekjes.',
       id: 5,
       dependsOn: 4,
-      image: 'https://media.libelle.nl/m/kdm8t04ihtu3.jpg',
+      image: 'https://www.leukerecepten.nl/wp-content/uploads/2019/07/spaghetti_carbonara_01.jpg',
+      mentalNotes: [],
+      timers: [],
+      feedbacks: []
+    },{
+      instruction: 'Mix de eieren en de kaas goed door elkaar in een bakje.',
+      id: 9,
+      dependsOn: 3,
+      image: 'https://www.leukerecepten.nl/wp-content/uploads/2019/07/spaghetti_carbonara_02.jpg',
       mentalNotes: [],
       timers: [],
       feedbacks: []
     },{
       instruction: 'Doe de eieren, kaas en peper door de spaghetti en roer goed.',
       id: 6,
-      dependsOn: 3,
+      dependsOn: 9,
       image: 'https://www.leukerecepten.nl/wp-content/uploads/2019/07/spaghetti_carbonara_04.jpg',
       mentalNotes: [],
       timers: [],

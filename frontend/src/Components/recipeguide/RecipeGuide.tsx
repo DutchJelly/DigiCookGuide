@@ -412,9 +412,10 @@ export default function RecipeGuide(props: RecipeGuideProps){
             <div className="main" style={{gridArea: "main"}}>
                 <div className="instructions" style={{gridArea: "instructions"}}>
                     <div className="instructionImageWrapper" style={{backgroundImage: `url(${steps[currentStep].image})`}}>
-                        {/* <img src={steps[currentStep].image} alt=""/> */}
                     </div>
                     <div className="instructionTextWrapper">
+                        {/* TODO: this doesn't get updated when a timer finishes or feedback is given */}
+                        {/* {isBlocked ? 'You currently have no new instructions to do because you\'re either waiting for a timer or because the guide is waiting for some feedback from you.' : steps[currentStep].instruction} */}
                         {steps[currentStep].instruction}
                     </div>
                 </div>

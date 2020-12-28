@@ -1,0 +1,71 @@
+
+
+.outerPickerContainer {
+    text-align: center;
+    min-width: 700px;
+    /* this 700px ofcourse needs to be replaced with media queries */
+}
+
+.outerPickerContainer h1 {
+    font-size: 4rem;
+    font-weight: bolder;
+    letter-spacing: 0.2rem;
+    text-align: center;
+    margin: 1rem;
+}
+
+.recipePickerContainer {
+    width: 700px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    grid-auto-rows: 500px;
+}
+
+.recipe {
+    background-color: black;
+    text-align: center;
+
+    margin: 2rem;
+    font-size: large;
+    padding: 1rem;
+    background-color: rgb(241, 246, 242);
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    display: flex;
+    flex-direction: column;
+}
+
+.recipe .name {
+    font-size: x-large;
+    font-weight: bold;
+}
+
+.recipe .image {
+    margin: 1rem;
+    flex: 1;
+    background-size: contain;
+    background-position: bottom;
+    background-repeat: no-repeat;
+}
+
+.recipe .author {
+    text-align: right;
+    font-size: medium;
+    font-style: italic;
+    margin-bottom: -0.5rem;
+}
+
+.recipe .steps {
+    text-align: center;
+}
+
+.recipePickBtn {
+    margin: 1rem auto 0.2rem auto;
+    width: 70%;
+    height: 50px;
+    background-color: black;
+    color: white;
+    font-weight: bold;
+    border-radius: 0.5rem;
+}

@@ -1,5 +1,5 @@
 import React, {useState, useRef, useEffect} from 'react'
-import { useLocation, useHistory, Link } from 'react-router-dom'
+import { useLocation, useHistory } from 'react-router-dom'
 import './styling.css'
 
 
@@ -7,8 +7,6 @@ type TimerIdentifier = {
     step: number,
     index: number
 }
-
-type StringValidator = (arg: string) => boolean;
 
 export default function RecipeSettings(){
     const location = useLocation();

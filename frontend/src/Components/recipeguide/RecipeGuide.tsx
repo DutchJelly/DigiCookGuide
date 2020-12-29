@@ -1,6 +1,7 @@
 
 import React, {useState, useEffect} from 'react'
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
+import { useLocation, useHistory } from 'react-router-dom'
 import DisableableBtn from '../util/DisableableBtn'
 
 import './styling.css'
@@ -107,8 +108,10 @@ function CommandFeedback(props: {command: string | null | undefined, delay: numb
     )
 }
 
-export default function RecipeGuide(props: RecipeGuideProps){
-    
+export default function RecipeGuide(){
+    const location = useLocation();
+    const history = useHistory();
+    const [recipe, setRecipe] = useState(location.state as Recipe);
     const [currentStep, setCurrentStep] = useState(0);
     const [mentalNotes, setMentalNotes] = useState(Array<MentalNote>());
     const [timers, setTimers] = useState(Array<Timer>());
@@ -142,7 +145,7 @@ export default function RecipeGuide(props: RecipeGuideProps){
         }
     ];
 
-    props.recipe.steps.forEach(x => {
+    recipe.steps.forEach(x => {
         x.feedbacks.forEach(y => {
             staticCommands.push({
                 command: y.command,
@@ -191,7 +194,7 @@ export default function RecipeGuide(props: RecipeGuideProps){
 
     //Copy steps array so we can change the order without changing the order of the original recipe.
     //The steps array will always be split in 2 parts: the left part are the finished instructions, and the right part are the unfinished ones.
-    const [steps, setSteps] = useState([...props.recipe.steps]);
+    const [steps, setSteps] = useState([...recipe.steps]);
 
     //Look if the instruction needs to wait for a timer to finish.
     const isTimerDependant = (instructionId: number, lastExecutedInstructionIndex: number) => {
@@ -396,7 +399,12 @@ export default function RecipeGuide(props: RecipeGuideProps){
 
     return(
         <div className="guide">
-            <button className="exitBtn rounded-br">Exit Recipe Guide</button>
+            <button className="exitBtn rounded-br" onClick={() => {
+                history.push({
+                    pathname: 'recipesettings',
+                    state: recipe
+                });
+            }}>Exit Guide</button>
 
             <div className="voiceControl">
                 <h2>Voice support: </h2>

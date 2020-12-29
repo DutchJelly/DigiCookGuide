@@ -19,14 +19,18 @@
     "guideMenu";
 }
 
-.exitBtn{
-    width: 100px;
-    height: 75px;
-    background-color: #BCCC8D;
-    position: absolute;
-    padding: 10px;
-    top: 0;
-    left: 0;
+.exitBtn {
+    position: fixed;
+    left: 1rem;
+    top: 1rem;
+    /* border: 2px solid black; */
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    padding: 1rem 2rem;
+    font-size: 1.3rem;
+    border-radius: 0.4rem;
+}
+.exitBtn:hover {
+    background-color: rgb(233, 233, 233);
 }
 
 .commandFeedback{

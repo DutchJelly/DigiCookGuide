@@ -37,3 +37,8 @@ interface Recipe {
     author: String,
     difficulty: number,
 }
+
+interface RefObject<T> {
+    // immutable
+    readonly current: T | null
+}

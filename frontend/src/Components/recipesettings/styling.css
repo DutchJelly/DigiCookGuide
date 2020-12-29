@@ -1,0 +1,109 @@
+.settingscontainer{
+    width: 70%;
+    min-width: 700px;
+    margin: 0 auto;
+}
+
+.settingscontainer h1 {
+    font-size: 4rem;
+    font-weight: bolder;
+    letter-spacing: 0.2rem;
+    text-align: center;
+    margin: 1rem;
+}
+
+.step {
+    font-size: large;
+    margin-bottom: 1rem;
+    padding: 2rem;
+    background-color: rgb(241, 246, 242);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}   
+
+.step .id {
+    font-style: italic;
+    margin: -2rem 0 0 -2rem;
+    padding: 1rem;
+}
+
+.step .image {
+    width: 80%;
+    height: 200px;
+    background-position: left;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.timers button {
+    padding: 1rem;
+    background-color: rgb(2, 54, 0);
+    border-radius: 0.5rem;
+    color: white;
+}
+
+.timers button:hover {
+    opacity: 0.8;
+}
+
+.step .label {
+    font-size: large;
+    font-weight: bold;
+}
+
+.overlay {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: white;
+    z-index: 1;
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.overlay .currentInput {
+    font-size: 5rem;
+    padding: 1rem;
+}
+
+.overlay .info {
+    font-size: 2rem;
+}
+
+.settingscontainer .cookBtn {
+    width: 160px;
+    height: 160px;
+    border-radius: 80px;
+    padding: 1rem;
+    margin: 1rem auto;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+    text-align: center;
+    background-color: rgb(2, 54, 0);
+    color: white;
+    position: fixed;
+    right: 1rem;
+    bottom: 1rem;
+    font-size: 2rem;
+}
+
+.settingscontainer .backBtn {
+    position: fixed;
+    left: 1rem;
+    top: 1rem;
+    /* border: 2px solid black; */
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    padding: 1rem 2rem;
+    font-size: 1.3rem;
+    border-radius: 0.4rem;
+}
+.settingscontainer .backBtn:hover {
+    background-color: rgb(233, 233, 233);
+}
+
+.settingscontainer .cookBtn:hover {
+    opacity: 0.8;
+}

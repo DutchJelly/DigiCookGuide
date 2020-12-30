@@ -3,15 +3,12 @@
     height: 100vh;
     margin: 0;
     padding: 0;
-    background-color: black;
-    display: grid;
-    grid-template-columns: 6fr 2fr;
-    grid-template-areas: 
-    "main aside";
+    display: flex;
+    flex-direction: column;
 }
 
 .main{
-    background-color: white;
+    flex: 1;
     display: grid;
     grid-template-rows: 1fr 75px;
     grid-template-areas: 
@@ -31,6 +28,21 @@
 }
 .exitBtn:hover {
     background-color: rgb(233, 233, 233);
+}
+
+.top {
+    width: 300px;
+    margin: 1rem;
+    position: absolute;
+    right: 0;
+}
+
+.topContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .commandFeedback{
@@ -56,13 +68,14 @@
     left: 0;
     right: 0;
     margin: 0 auto;
-    width: 400px;
-    height: 40px;
-    border-bottom-right-radius: 1rem;
-    border-bottom-left-radius: 1rem;
+    width: 260px;
+    height: 60px;
+    border-bottom-right-radius: 0.4rem;
+    border-bottom-left-radius: 0.4rem;
     background-color: black;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     padding: 0.2rem 1rem 1rem 1rem;
+    text-align: center;
 }
 
 .voiceControl>h2{
@@ -78,38 +91,7 @@
 }
 
 .voiceControl .feedback{
-    margin-left: 0.8rem;
     color: white;
-}
-
-
-.aside{
-    background-color: #F0EEEB;
-    min-width: 200px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    overflow-y: auto;
-}
-
-.asideContainer{
-    width: 80%;
-    min-width: 200px;
-    margin: 0 auto;
-    padding-bottom: 2rem;
-    overflow-y: scroll;
-}
-
-.asideContainer h1{
-    color: #E8411B;
-    text-align: center;
-    font-weight: normal;
-    font-size: 2rem;
-}
-
-.asideContainer h2{
-    text-align: left;
-    font-weight: normal;
-    font-size: 1.8rem;
-    margin-top: 2rem;
 }
 
 .guideMenu{
@@ -127,13 +109,14 @@
 
 .scrollButton{
     flex: 1;
+    font-size: 1.5rem;
     min-width: 100px;
-    background-color: #535C27;
+    background-color: rgb(2, 54, 0);
     color: #F0EEEB;
 }
 
 .scrollButton:hover{
-    background-color: #3f461e;
+    opacity: 0.8;
 }
 
 button:focus{
@@ -153,12 +136,21 @@ button:focus{
 .progressbarFiller{
     height: 100%;
     width: 20%;
-    background-color: #FADFC6;
+    background: 
+    /* On "top" */
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 20px,
+      rgba(0, 0, 0, 0.596) 20px,
+      rgba(0, 0, 0, 0.596) 24px
+    );  
     transition-duration: 200ms;
 }
 
 .progressText{
     position: absolute;
+    background-color: rgba(255, 255, 255, 0.534);
     left: 50%;
     top: 50%;
     transform: translate(-50%,-50%);
@@ -174,7 +166,7 @@ button:focus{
 
 .instructionImageWrapper{
     /* height: 50%; */
-    width: 80%;
+    width: 70%;
     min-width: 400px;
     flex: 4;
     /* background-color: black; */
@@ -192,17 +184,19 @@ button:focus{
     text-align: center;
     flex: 1;
     font-size: 3rem;
-    max-width: 700px;
-    width: 80%;
+    max-width: 70%;
     margin: 0 auto;
 
 }
 
 .mentalNote{
-    width: 95%;
-    min-width: 200px;
-    margin: 0 auto;
+    width: 100%;
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 0.3rem;
     padding: 1rem;
+    margin-left: auto;
+    margin-bottom: 1rem;
 }
 
 .notePrefix{
@@ -214,23 +208,56 @@ button:focus{
     font-size: 1.3rem;
 }
 
-.recipeTimer{
-    width: 95%;
-    min-width: 200px;
-    margin: 0 auto;
+.outerTimer {
+    width: 100%;
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 0.3rem;
     padding: 1rem;
-    /* background-color: white;
-    border-radius: 1rem; */
+    display: flex;
+    flex-direction: column;
+    margin-left: auto;
+    margin-bottom: 1rem;
+}
+
+.recipeTimer{
+    display: flex;
+    flex-direction: row;
 }
 
 .timerText{
-    font-size: 1.3rem;
+    font-size: 1.5rem;
     color: rgb(37, 37, 37);
+    margin: 0.2rem;
+    flex: 1;
 }
 
 .timerValue{
-    font-size: 1.3rem;
+    height: 70px;
+    font-size: 1.5rem;
+    letter-spacing: 0.3rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    background-color: black;
+    /* position: relative;
+    left: 50%;
+    transform: translate(-50%, 0); */
+    color: white;
+    width: auto;
+    display: inline-block;
+    margin: 0.3rem;
+    align-self: flex-end;
 }
+
+.pauseBtn {
+    font-size: 1rem;
+    font-style: italic;
+    text-align: left;
+    margin-top: -0.5rem;
+    padding-bottom: -1rem;
+}
+
+
 
 .timerValPrefix{
     color:  #E8411B;
@@ -238,29 +265,58 @@ button:focus{
 }
 
 .userFeedback{
-    width: 95%;
-    min-width: 200px;
-    margin: 0 auto;
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 0.3rem;
     padding: 1rem;
+    width: 100%;    
+    margin-left: auto;
+    margin-bottom: 1rem;
 }
 
 .feedbackText{
     font-size: 1.3rem;
-    color: rgb(37, 37, 37);
+    color: black;
 }
 
 .userFeedbackBtn{
-    width: 75%;
     height: 3rem;
     padding: 0.2rem;
     min-width: 180px;
-    border-radius: 1rem;
-    margin: 1rem;
-    background-color: #E8411B;
+    border-radius: 0.4rem;
+    margin-top: 1rem;
+    width: 100%;
+    background-color: rgb(2, 54, 0);
     font-size: 1.5rem;
     color: white;
 }
 
 .userFeedbackBtn:hover{
-    background-color: #942a12;
+    opacity: 0.8;
+}
+
+
+.animate {
+    animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+@keyframes shake {
+    10%, 90% {
+      transform: translate3d(-1px, 0, 0);
+    }
+    
+    20%, 80% {
+      transform: translate3d(2px, 0, 0);
+    }
+  
+    30%, 50%, 70% {
+      transform: translate3d(-4px, 0, 0);
+    }
+  
+    40%, 60% {
+      transform: translate3d(4px, 0, 0);
+    }
 }

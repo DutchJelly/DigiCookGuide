@@ -1,15 +1,10 @@
 
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 import { useLocation, useHistory } from 'react-router-dom'
 import DisableableBtn from '../util/DisableableBtn'
 
 import './styling.css'
-
-
-type RecipeGuideProps = {
-    recipe: Recipe
-}
 
 
 function MentalNote(props: {mentalNote: MentalNote, allSteps: RecipeStep[], currentInstructionIndex: number}){
@@ -22,14 +17,16 @@ function MentalNote(props: {mentalNote: MentalNote, allSteps: RecipeStep[], curr
         return null;
     return(
         <div className="mentalNote">
-            <div className="noteText"><span className="notePrefix">Note #{props.mentalNote.pendingInstructionId}: </span>{props.mentalNote.note}</div>
+            <div className="noteText"><span className="notePrefix">Note: </span>{props.mentalNote.note}</div>
         </div>
     );
 }
 
 function Timer(props: {timer: Timer, callback: (t: Timer) => any}){
-    const [endTime] = useState(Date.now() + props.timer.durationSeconds * 1000);
+    const timerRef = useRef<HTMLDivElement>(null);
+    const [endTime, setEndTime] = useState(Date.now() + props.timer.durationSeconds * 1000);
     const [timeLeft, setTimeLeft] = useState(endTime - Date.now());
+    const [paused, setPaused] = useState(false);
 
     //Credits to https://stackoverflow.com/questions/57137094/implementing-a-countdown-timer-in-react-with-hooks
     useEffect(() => {
@@ -39,10 +36,18 @@ function Timer(props: {timer: Timer, callback: (t: Timer) => any}){
         }
 
         const runningInterval = setInterval(() => {
+            if(paused) {
+                setEndTime(endTime+1000);
+                return;
+            }
             setTimeLeft(Math.max(0, endTime - Date.now()));
+            if(timeLeft < 10000) {
+                console.log("toggling");
+                timerRef.current!.classList.toggle('animate');
+            }
         }, 1000);
         return () => clearInterval(runningInterval);
-    }, [timeLeft]); //Rerun code when timeLeft changes.
+    }, [timeLeft, paused]); //Rerun code when timeLeft changes.
 
     //When the end time updates, we update the time left accordingly. WARNING: not tested
     useEffect(() => {
@@ -56,15 +61,18 @@ function Timer(props: {timer: Timer, callback: (t: Timer) => any}){
         let h = Math.floor(m/60);
         m -= h*60;
         let timeString = '';
-        if(h) return `${h} hours, ${m} minutes and ${s} seconds`;
-        if(m) return `${m} minutes and ${s} seconds`;
-        return `${s} seconds`;
+        if(h) return `${h}:${m < 10 ? '0': ''}${m}:${s < 10 ? '0' : ''}${s}`;
+        if(m) return `${m}:${s < 10 ? '0' : ''}${s}`;
+        return `${s}`;
     }
 
     return(
-        <div className="recipeTimer">
-            <div className="timerText">{props.timer.note}</div>
-            <div className="timerValue"><span className="timerValPrefix">Remaining: </span>{formatTime(timeLeft)}</div>
+        <div className="outerTimer" ref={timerRef}>
+            <div className="recipeTimer">
+                <div className="timerText">{props.timer.note}</div>
+                <div className="timerValue">{formatTime(timeLeft)}</div>
+            </div>
+            <button className="pauseBtn" onClick={() => setPaused(!paused)}>{paused ? '(click to unpause)' : '(click to pause)'}</button>
         </div>
     );
 
@@ -109,6 +117,7 @@ function CommandFeedback(props: {command: string | null | undefined, delay: numb
 }
 
 export default function RecipeGuide(){
+    const sidebarRef = useRef<HTMLDivElement>(null);
     const location = useLocation();
     const history = useHistory();
     const [recipe, setRecipe] = useState(location.state as Recipe);
@@ -121,25 +130,27 @@ export default function RecipeGuide(){
     const [voiceEnabled, setVoiceEnabled] = useState(true);
     const [voiceFeedback, setVoiceFeedback] = useState("");
     const [executedCmd, setExecutedCmd] = useState('');
+    
+    const idleImage = 'https://imagesvc.meredithcorp.io/v3/mm/image?q=85&c=sc&poi=face&w=2000&h=1047&url=https%3A%2F%2Fstatic.onecms.io%2Fwp-content%2Fuploads%2Fsites%2F19%2F2018%2F04%2F05%2FGettyImages-607041431-2000.jpg';
 
     const staticCommands = [{
-            command: "next instruction",
+            command: "next",
             callback: () => {
                 console.log('command is executed');
                 scroll(1);
                 resetTranscript();
                 setExecutedCmd('');
-                setExecutedCmd('next instruction');
+                setExecutedCmd('next');
             },
             matchInterim: true
         },{
-            command: "previous instruction",
+            command: "previous",
             callback: () => {
                 console.log('command is executed');
                 scroll(-1);
                 resetTranscript();
                 setExecutedCmd('');
-                setExecutedCmd('previous instruction');
+                setExecutedCmd('previous');
             },
             matchInterim: true
         }
@@ -160,22 +171,6 @@ export default function RecipeGuide(){
             })
         })
     });
-
-    // useEffect(() => {
-    //     steps.forEach(x => {
-    //         x.feedbacks.forEach(y => {
-    //             staticCommands.push({
-    //                 command: y.command,
-    //                 callback: () => {
-    //                     if(!feedbacks.includes(y)) return;
-    //                     handleFeedback(y);
-    //                     resetTranscript();
-    //                 },
-    //                 matchInterim: true
-    //             })
-    //         })
-    //     })
-    // }, []);
 
 
     useEffect(() => {
@@ -276,6 +271,7 @@ export default function RecipeGuide(){
         //TODO: think of whether it is logical to just remove the timers when you go back..
         if(x < 0){
             setCurrentStep(currentStep + x);
+            setIsBlocked(false);
             return;
         }
 
@@ -328,6 +324,15 @@ export default function RecipeGuide(){
             indepInstrOffset++;
         if(currentStep + indepInstrOffset === steps.length){
             //There is no instruction that we can do; a timer needs to finish or feedback needs to be given.
+            if(isBlocked) {
+                if(!sidebarRef.current?.classList.contains('animate')){
+                    sidebarRef.current?.classList.add('animate');
+                    setTimeout(() => {
+                        sidebarRef.current?.classList.remove('animate');
+                    }, 820);
+                }
+                
+            }
             setIsBlocked(true);
             return;
         }
@@ -347,6 +352,7 @@ export default function RecipeGuide(){
     }
 
     const handleTimerFinish = (t: Timer) => {
+        setIsBlocked(false);
         let pendingInstructionIndex = steps.findIndex(x => x.id === t.pendingInstructionId);
         if(pendingInstructionIndex === -1) {
             console.error(`no pending instruction was found for id ${t.pendingInstructionId}`);
@@ -372,6 +378,7 @@ export default function RecipeGuide(){
     }
 
     const handleFeedback = (f: UserFeedback) => {
+        setIsBlocked(false);
         let pendingInstructionIndex = steps.findIndex(x => x.id === f.pendingInstructionId);
         if(pendingInstructionIndex === -1) {
             console.error(`no pending instruction was found for id ${f.pendingInstructionId}`);
@@ -385,14 +392,14 @@ export default function RecipeGuide(){
             insertStep(pendingInstructionIndex, currentStep+1);
             setCurrentStep(currentStep+1);   
             setFeedbacks(feedbacks.filter(x => x !== f));
+            
             return;
         }
        
         if(f.important)
             insertStep(pendingInstructionIndex, currentStep);
         else 
-            insertStep(pendingInstructionIndex, currentStep+1);
-        
+            insertStep(pendingInstructionIndex, currentStep+1);        
         setFeedbacks(feedbacks.filter(x => x !== f));
     }
 
@@ -407,51 +414,48 @@ export default function RecipeGuide(){
             }}>Exit Guide</button>
 
             <div className="voiceControl">
-                <h2>Voice support: </h2>
+                <h2>Voice support is </h2>
                 <button onClick={() => setVoiceEnabled(!voiceEnabled)}className="toggleVoice">{voiceEnabled ? "enabled" : "disabled"}</button>
-                <span className="feedback">
-                    {transcript.split(" ").splice(-1)}
+                <br/><span className="feedback">
+                    Latest voice command: {transcript.split(" ").splice(-1)}
                 </span>
             </div>
             
             <CommandFeedback command={executedCmd} delay={750}/>
         
 
-            <div className="main" style={{gridArea: "main"}}>
+            <div className="top" ref={sidebarRef}>
+                <div className="topContainer">
+                    {timers.map(timer => <Timer timer={timer} callback={handleTimerFinish}/>)}
+                    {feedbacks.map(feedback => <UserFeedback userFeedback={feedback} callback={handleFeedback}/>)}
+                    {mentalNotes.map(note => <MentalNote mentalNote={note} allSteps={steps} currentInstructionIndex={currentStep}/>)}
+                </div>
+            </div>
+
+            <div className="main">
                 <div className="instructions" style={{gridArea: "instructions"}}>
-                    <div className="instructionImageWrapper" style={{backgroundImage: `url(${steps[currentStep].image})`}}>
+                    <div className="instructionImageWrapper" style={{backgroundImage: `url(${isBlocked ? idleImage : steps[currentStep].image})`}}>
                     </div>
                     <div className="instructionTextWrapper">
+
                         {/* TODO: this doesn't get updated when a timer finishes or feedback is given */}
                         {/* {isBlocked ? 'You currently have no new instructions to do because you\'re either waiting for a timer or because the guide is waiting for some feedback from you.' : steps[currentStep].instruction} */}
-                        {steps[currentStep].instruction}
+                        {isBlocked ? 'You don\'t have much to do. Maybe you can do some cleaning!' : steps[currentStep].instruction}
                     </div>
                 </div>
                 
                 <div className="guideMenu" style={{gridArea: "guideMenu"}}>
-                    <DisableableBtn className="scrollButton rounded-tr" cb={() => scroll(-1)} clickable={currentStep > 0}>Previous<br/>Instruction</DisableableBtn>
+                    <DisableableBtn className="scrollButton rounded-tr" cb={() => scroll(-1)} clickable={currentStep > 0}>Previous</DisableableBtn>
                     <div className="progressbarWrapper">
                         <div className="progressbarOutline">
                             <div className="progressbarFiller" style={{width: `${getProgressPercentage()}%`}}/>
                             <div className="progressText">{currentStep + 1}/{steps.length}</div>
                         </div>
                     </div>
-                    <DisableableBtn className="scrollButton rounded-tl" cb={() => scroll(1)} clickable={currentStep < steps.length-1}>Next<br/>Instruction</DisableableBtn>
+                    <DisableableBtn className="scrollButton rounded-tl" cb={() => scroll(1)} clickable={currentStep < steps.length-1}>Next</DisableableBtn>
                 </div>
             </div>
-            <div className="aside" style={{gridArea: "aside"}}>
-                <div className="asideContainer">
-                    <h1>Cooking Notes</h1>
-                    <h2>Timers</h2>
-                    {timers.length} currently running
-                    {timers.map(timer => <Timer timer={timer} callback={handleTimerFinish}/>)}
-                    <h2>Awaiting Feedback</h2>
-                    {feedbacks.length} currently waiting
-                    {feedbacks.map(feedback => <UserFeedback userFeedback={feedback} callback={handleFeedback}/>)}
-                    <h2>Mental Notes</h2>
-                    {mentalNotes.map(note => <MentalNote mentalNote={note} allSteps={steps} currentInstructionIndex={currentStep}/>)}
-                </div>
-            </div>
+            
             
         </div>
     );

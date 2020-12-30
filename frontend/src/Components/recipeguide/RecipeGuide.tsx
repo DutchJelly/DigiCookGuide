@@ -224,9 +224,9 @@ export default function RecipeGuide(){
             console.error(`Cannot find if instruction is directly dependent because no instruction with id ${instructionId} exists.`);
             return false;
         }
-        if(instruction.id === instruction.dependsOn) return false;
+        if(instruction.dependsOn.includes(instruction.id)) return false;
 
-        let dependancy = steps.findIndex(x => x.id === instruction?.dependsOn);
+        let dependancy = steps.findIndex(x => instruction?.dependsOn.includes(x.id));
         if(dependancy === -1) {
             console.error(`Cannot find direct dependancy [${instruction.dependsOn}] of instruction [${instructionId}].`);
             return false;
@@ -270,8 +270,11 @@ export default function RecipeGuide(){
         //When scrolling backwards, we don't want to update mental notes or timers, those keep going.
         //TODO: think of whether it is logical to just remove the timers when you go back..
         if(x < 0){
-            setCurrentStep(currentStep + x);
-            setIsBlocked(false);
+            if(isBlocked){
+                setIsBlocked(false);
+            }else{
+                setCurrentStep(currentStep + x);
+            }
             return;
         }
 

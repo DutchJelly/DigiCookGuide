@@ -88,7 +88,7 @@ export default function RecipeSettings(){
                             <div className="id">ID: {x.id}</div>
                             <div className="image" style={{backgroundImage: `url(${x.image})`}}></div>
                             <div className="instruction"><span className="label">Instruction:</span> {x.instruction}</div>
-                            <div className="dependsOn"><span className="label">Depends on:</span> {x.dependsOn}</div>
+                            <div className="dependsOn"><span className="label">Depends on:</span> {x.dependsOn.join(', ')}</div>
                             
                             <div className="timers"><ul>{x.timers.map((y, i) => <li key={i}><span className="label">Timer with note: </span><i>{y.note}</i><br /><button onClick={() => {
                                 enableOverlay({index: i, step: x.id}, y.durationSeconds.toString());

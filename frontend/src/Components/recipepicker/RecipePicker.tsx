@@ -4,10 +4,11 @@ import './styling.css';
 
 
 let recipes = [{
+    name: 'spaghetti carbonara',
     steps: [{
         instruction: 'Zet een pan die ongeveer 3/4 gevuld is met water op het vuur.',
         id: 0,
-        dependsOn: 0,
+        dependsOn: [0],
         image: 'https://denverwatertap.org/wp-content/uploads/2017/12/boiling-water-flickrcommons-Scott-Ackerman.jpg',
         mentalNotes: [],
         timers: [],
@@ -20,7 +21,7 @@ let recipes = [{
       },{
         instruction: 'Doe de spaghetti in het kokende water.',
         id: 2,
-        dependsOn: 2,
+        dependsOn: [2],
         image: 'https://www.todayifoundout.com/wp-content/uploads/2014/01/cooking-pasta.jpg',
         mentalNotes: [],
         timers: [{
@@ -33,7 +34,7 @@ let recipes = [{
       },{
         instruction: 'Giet de spaghetti af, en zet de spaghetti ergens van het vuur neer.',
         id: 3,
-        dependsOn: 3,
+        dependsOn: [3],
         image: 'https://media.libelle.nl/m/kdm8t04ihtu3.jpg',
         mentalNotes: [{
           note: 'Als de spaghetti te heet is, zullen de eieren te veel stollen, laat het dus afkoelen.',
@@ -44,7 +45,7 @@ let recipes = [{
       },{
         instruction: 'Snij de knoflook en peterselie in fijne stukjes.',
         id: 4,
-        dependsOn: 4,
+        dependsOn: [4],
         image: 'https://www.culy.nl/wp-content/uploads/2013/09/Knoflook-stock.jpg',
         mentalNotes: [],
         timers: [],
@@ -52,7 +53,7 @@ let recipes = [{
       },{ 
         instruction: 'Doe de spekblokjes in een hete pan met wat olie.',
         id: 1,
-        dependsOn: 1,
+        dependsOn: [1],
         image: 'https://www.leukerecepten.nl/wp-content/uploads/2019/07/spaghetti_carbonara_01.jpg',
         mentalNotes: [],
         timers: [],
@@ -65,7 +66,7 @@ let recipes = [{
       },{
         instruction: 'Bak de knoflook en peterselie kort mee met de spekjes.',
         id: 5,
-        dependsOn: 4,
+        dependsOn: [4],
         image: 'https://www.leukerecepten.nl/wp-content/uploads/2019/07/spaghetti_carbonara_01.jpg',
         mentalNotes: [],
         timers: [],
@@ -73,7 +74,7 @@ let recipes = [{
       },{
         instruction: 'Mix de eieren en de kaas goed door elkaar in een bakje.',
         id: 9,
-        dependsOn: 3,
+        dependsOn: [3],
         image: 'https://www.leukerecepten.nl/wp-content/uploads/2019/07/spaghetti_carbonara_02.jpg',
         mentalNotes: [],
         timers: [],
@@ -81,7 +82,7 @@ let recipes = [{
       },{
         instruction: 'Doe de eieren, kaas en peper door de spaghetti en roer goed.',
         id: 6,
-        dependsOn: 9,
+        dependsOn: [9],
         image: 'https://www.leukerecepten.nl/wp-content/uploads/2019/07/spaghetti_carbonara_04.jpg',
         mentalNotes: [],
         timers: [],
@@ -89,7 +90,7 @@ let recipes = [{
       },{
         instruction: 'Voeg de spekjes nu toe aan het spaghettimengsel.',
         id: 7,
-        dependsOn: 6,
+        dependsOn: [6],
         image: 'https://www.leukerecepten.nl/wp-content/uploads/2019/07/spaghetti_carbonara_04.jpg',
         mentalNotes: [],
         timers: [],
@@ -97,7 +98,7 @@ let recipes = [{
       },{
         instruction: 'Serveer direct!',
         id: 8,
-        dependsOn: 7,
+        dependsOn: [7],
         image: 'https://www.leukerecepten.nl/wp-content/uploads/2019/07/pasta-carbonara_v.jpg',
         mentalNotes: [],
         timers: [],
@@ -118,9 +119,9 @@ function RecipePicker(){
                 Pick a Recipe
             </h1>
             <div className="recipePickerContainer">
-                {recipes.map(x => 
-                    <div className="recipe">
-                        <div className="name">No Name</div>
+                {recipes.map((x, index) => 
+                    <div key={index} className="recipe">
+                        <div className="name">{x.name}</div>
                         <div className="image" style={{backgroundImage: `url(${x.steps[x.steps.length-1].image})`}}></div>
                         <div className="steps">Steps: {x.steps.length}</div>
                         <div className="difficulty">Difficulty: {x.difficulty}/10</div>

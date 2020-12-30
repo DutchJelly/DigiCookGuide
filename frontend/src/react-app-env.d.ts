@@ -20,9 +20,9 @@ interface UserFeedback {
 }
 
 interface RecipeStep {
-    instruction: String,
+    instruction: string,
     id: number,
-    dependsOn: number,
+    dependsOn: number[],
     image: Url,
     mentalNotes: MentalNote[], //Notes for stuff like 'keep stiring in the pan until x'
     timers: Timer[], //timers that will run after the instruction until some instruction
@@ -32,9 +32,10 @@ interface RecipeStep {
 
 
 interface Recipe {
+    name: string,
     steps: RecipeStep[],
-    ingredients: String[],
-    author: String,
+    ingredients: string[],
+    author: string,
     difficulty: number,
 }
 

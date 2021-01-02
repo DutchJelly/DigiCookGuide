@@ -2,6 +2,8 @@
 import React, {useState, useEffect, useRef} from 'react'
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 import { useLocation, useHistory } from 'react-router-dom'
+import useSound from 'use-sound'
+import { getAudioUrl, getAudioBase64 } from 'google-tts-api'
 import DisableableBtn from '../util/DisableableBtn'
 
 import './styling.css'
@@ -27,6 +29,22 @@ function Timer(props: {timer: Timer, callback: (t: Timer) => any}){
     const [endTime, setEndTime] = useState(Date.now() + props.timer.durationSeconds * 1000);
     const [timeLeft, setTimeLeft] = useState(endTime - Date.now());
     const [paused, setPaused] = useState(false);
+    const [isNotified, setIsNotified] = useState(false);
+
+
+    //This doesn't work for some reason.
+    const url = getAudioUrl('10 seconds left on a timer', {
+        lang: 'en-US',
+        slow: false,
+        host: 'https://translate.google.com',
+    });
+
+    const [playTimerSpeach] = useSound(url);
+
+
+    
+
+
 
     //Credits to https://stackoverflow.com/questions/57137094/implementing-a-countdown-timer-in-react-with-hooks
     useEffect(() => {
@@ -42,8 +60,11 @@ function Timer(props: {timer: Timer, callback: (t: Timer) => any}){
             }
             setTimeLeft(Math.max(0, endTime - Date.now()));
             if(timeLeft < 10000) {
-                console.log("toggling");
                 timerRef.current!.classList.toggle('animate');
+                if(!isNotified) {
+                    playTimerSpeach();
+                    setIsNotified(true);
+                }
             }
         }, 1000);
         return () => clearInterval(runningInterval);
@@ -136,7 +157,6 @@ export default function RecipeGuide(){
     const staticCommands = [{
             command: "next",
             callback: () => {
-                console.log('command is executed');
                 scroll(1);
                 resetTranscript();
                 setExecutedCmd('');
@@ -146,7 +166,6 @@ export default function RecipeGuide(){
         },{
             command: "previous",
             callback: () => {
-                console.log('command is executed');
                 scroll(-1);
                 resetTranscript();
                 setExecutedCmd('');
@@ -224,14 +243,11 @@ export default function RecipeGuide(){
             console.error(`Cannot find if instruction is directly dependent because no instruction with id ${instructionId} exists.`);
             return false;
         }
-        if(instruction.dependsOn.includes(instruction.id)) return false;
-
-        let dependancy = steps.findIndex(x => instruction?.dependsOn.includes(x.id));
-        if(dependancy === -1) {
-            console.error(`Cannot find direct dependancy [${instruction.dependsOn}] of instruction [${instructionId}].`);
+        if(!instruction.dependsOn || instruction.dependsOn.includes(instruction.id)) {
             return false;
         }
-        return dependancy > lastExecutedInstructionIndex;
+        
+        return steps.some((x, i) => (instruction!.dependsOn.includes(x.id) && (i > lastExecutedInstructionIndex)));
     }
 
     const isDependent = (instructionId: number, lastExecutedInstructionIndex: number) => {
@@ -266,7 +282,6 @@ export default function RecipeGuide(){
         if(currentStep+x < 0 || currentStep+x >= steps.length)
             return;
 
-        console.log(steps);
         //When scrolling backwards, we don't want to update mental notes or timers, those keep going.
         //TODO: think of whether it is logical to just remove the timers when you go back..
         if(x < 0){
@@ -354,6 +369,8 @@ export default function RecipeGuide(){
         return ((currentStep+1)/steps.length) * 100;
     }
 
+    const [playAlert] = useSound('/alert.wav');
+
     const handleTimerFinish = (t: Timer) => {
         setIsBlocked(false);
         let pendingInstructionIndex = steps.findIndex(x => x.id === t.pendingInstructionId);
@@ -362,6 +379,9 @@ export default function RecipeGuide(){
             setTimers(timers.filter(x => x !== t));
             return;
         }
+
+
+        playAlert();
 
         //If the user couldn't scroll further, the user actually completed the step, so we don't swab it forwards again.
         //Also, if the current step is the one that actually started the timer that finished, we also know that it doesn't need to be swabbed forwards.
@@ -429,9 +449,9 @@ export default function RecipeGuide(){
 
             <div className="top" ref={sidebarRef}>
                 <div className="topContainer">
-                    {timers.map(timer => <Timer timer={timer} callback={handleTimerFinish}/>)}
-                    {feedbacks.map(feedback => <UserFeedback userFeedback={feedback} callback={handleFeedback}/>)}
-                    {mentalNotes.map(note => <MentalNote mentalNote={note} allSteps={steps} currentInstructionIndex={currentStep}/>)}
+                    {timers.map((timer, i) => <Timer key={i} timer={timer} callback={handleTimerFinish}/>)}
+                    {feedbacks.map((feedback, i) => <UserFeedback key={i} userFeedback={feedback} callback={handleFeedback}/>)}
+                    {mentalNotes.map((note, i) => <MentalNote key={i} mentalNote={note} allSteps={steps} currentInstructionIndex={currentStep}/>)}
                 </div>
             </div>
 

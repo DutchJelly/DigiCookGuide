@@ -4,6 +4,108 @@ import './styling.css';
 
 
 let recipes = [{
+  name: 'Cous Cous met gehaktballetjes',
+  author: 'Jelle Keulemans',
+  steps: [{
+    instruction: 'Snij de ui in kleine stukjes.',
+    id: 1,
+    dependsOn: [1],
+    image: 'https://imagesvc.meredithcorp.io/v3/mm/image?q=85&c=sc&poi=face&url=https%3A%2F%2Fimg1.cookinglight.timeinc.net%2Fsites%2Fdefault%2Ffiles%2Fstyles%2F4_3_horizontal_-_1200x900%2Fpublic%2Fimage%2F2018%2F02%2Fmain%2Fcutting-onions.jpg%3Fitok%3D0kUr7Npt%261518453901',
+    mentalNotes: [],
+    timers: [],
+    feedbacks: []
+  }, {
+    instruction: 'Voeg de ui en kruiden toe aan het gehakt',
+    id: 2,
+    dependsOn: [1],
+    image: 'https://imagesvc.meredithcorp.io/v3/mm/image?q=85&c=sc&poi=face&url=https%3A%2F%2Fimg1.cookinglight.timeinc.net%2Fsites%2Fdefault%2Ffiles%2Fstyles%2F4_3_horizontal_-_1200x900%2Fpublic%2Fimage%2F2018%2F02%2Fmain%2Fcutting-onions.jpg%3Fitok%3D0kUr7Npt%261518453901',
+    mentalNotes: [],
+    timers: [],
+    feedbacks: []
+  }, {
+    instruction: 'Maak de balletjes',
+    id: 3,
+    dependsOn: [2],
+    image: 'https://imagesvc.meredithcorp.io/v3/mm/image?q=85&c=sc&poi=face&url=https%3A%2F%2Fimg1.cookinglight.timeinc.net%2Fsites%2Fdefault%2Ffiles%2Fstyles%2F4_3_horizontal_-_1200x900%2Fpublic%2Fimage%2F2018%2F02%2Fmain%2Fcutting-onions.jpg%3Fitok%3D0kUr7Npt%261518453901',
+    mentalNotes: [],
+    timers: [],
+    feedbacks: []
+  }, {
+    instruction: 'Doe de balletjes in pan met wat olie.',
+    id: 4,
+    dependsOn: [3],
+    image: 'https://imagesvc.meredithcorp.io/v3/mm/image?q=85&c=sc&poi=face&url=https%3A%2F%2Fimg1.cookinglight.timeinc.net%2Fsites%2Fdefault%2Ffiles%2Fstyles%2F4_3_horizontal_-_1200x900%2Fpublic%2Fimage%2F2018%2F02%2Fmain%2Fcutting-onions.jpg%3Fitok%3D0kUr7Npt%261518453901',
+    mentalNotes: [],
+    timers: [],
+    feedbacks: [{
+      command: 'baking finished',
+      note: 'Bak de balletjes goudbruin.',
+      pendingInstructionId: 5,
+      important: true,
+    }]
+  }, {
+    instruction: 'Doe de groenten en tomatensaus bij de balletjes in de pan',
+    id: 5,
+    dependsOn: [6],
+    image: 'https://imagesvc.meredithcorp.io/v3/mm/image?q=85&c=sc&poi=face&url=https%3A%2F%2Fimg1.cookinglight.timeinc.net%2Fsites%2Fdefault%2Ffiles%2Fstyles%2F4_3_horizontal_-_1200x900%2Fpublic%2Fimage%2F2018%2F02%2Fmain%2Fcutting-onions.jpg%3Fitok%3D0kUr7Npt%261518453901',
+    mentalNotes: [],
+    timers: [],
+    feedbacks: []
+  }, {
+    instruction: 'Snij alle groentes.',
+    id: 6,
+    dependsOn: [5],
+    image: 'https://imagesvc.meredithcorp.io/v3/mm/image?q=85&c=sc&poi=face&url=https%3A%2F%2Fimg1.cookinglight.timeinc.net%2Fsites%2Fdefault%2Ffiles%2Fstyles%2F4_3_horizontal_-_1200x900%2Fpublic%2Fimage%2F2018%2F02%2Fmain%2Fcutting-onions.jpg%3Fitok%3D0kUr7Npt%261518453901',
+    mentalNotes: [],
+    timers: [],
+    feedbacks: []
+  }, {
+    instruction: 'Zet de waterkoker aan.',
+    id: 7,
+    dependsOn: [7],
+    image: 'https://imagesvc.meredithcorp.io/v3/mm/image?q=85&c=sc&poi=face&url=https%3A%2F%2Fimg1.cookinglight.timeinc.net%2Fsites%2Fdefault%2Ffiles%2Fstyles%2F4_3_horizontal_-_1200x900%2Fpublic%2Fimage%2F2018%2F02%2Fmain%2Fcutting-onions.jpg%3Fitok%3D0kUr7Npt%261518453901',
+    mentalNotes: [],
+    timers: [],
+    feedbacks: [{
+      command: 'cooking',
+      note: 'Druk op de knop of zeg het commando als het water kookt.',
+      pendingInstructionId: 8,
+      important: true,
+    }]
+  }, {
+    instruction: 'Voeg het kokende water toe aan de cous cous.',
+    id: 8,
+    dependsOn: [8],
+    image: 'https://imagesvc.meredithcorp.io/v3/mm/image?q=85&c=sc&poi=face&url=https%3A%2F%2Fimg1.cookinglight.timeinc.net%2Fsites%2Fdefault%2Ffiles%2Fstyles%2F4_3_horizontal_-_1200x900%2Fpublic%2Fimage%2F2018%2F02%2Fmain%2Fcutting-onions.jpg%3Fitok%3D0kUr7Npt%261518453901',
+    mentalNotes: [],
+    timers: [{
+      note: 'Laat de cous cous weken',
+      durationSeconds: 300,
+      pendingInstructionId: 9,
+      important: true,
+    }],
+    feedbacks: []
+  }, {
+    instruction: 'Giet de cous cous af als er nog water in zit.',
+    id: 9,
+    dependsOn: [8],
+    image: 'https://imagesvc.meredithcorp.io/v3/mm/image?q=85&c=sc&poi=face&url=https%3A%2F%2Fimg1.cookinglight.timeinc.net%2Fsites%2Fdefault%2Ffiles%2Fstyles%2F4_3_horizontal_-_1200x900%2Fpublic%2Fimage%2F2018%2F02%2Fmain%2Fcutting-onions.jpg%3Fitok%3D0kUr7Npt%261518453901',
+    mentalNotes: [],
+    timers: [],
+    feedbacks: []
+  }, {
+    instruction: 'Serveer',
+    id: 10,
+    dependsOn: [9, 5],
+    image: 'https://imagesvc.meredithcorp.io/v3/mm/image?q=85&c=sc&poi=face&url=https%3A%2F%2Fimg1.cookinglight.timeinc.net%2Fsites%2Fdefault%2Ffiles%2Fstyles%2F4_3_horizontal_-_1200x900%2Fpublic%2Fimage%2F2018%2F02%2Fmain%2Fcutting-onions.jpg%3Fitok%3D0kUr7Npt%261518453901',
+    mentalNotes: [],
+    timers: [],
+    feedbacks: []
+  }]
+},
+  
+  
+  {
     name: 'spaghetti carbonara',
     steps: [{
         instruction: 'Zet een pan die ongeveer 3/4 gevuld is met water op het vuur.',

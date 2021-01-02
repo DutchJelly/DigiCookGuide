@@ -8,8 +8,28 @@ import DisableableBtn from '../util/DisableableBtn'
 
 import './styling.css'
 
+function usePulse(ref: React.RefObject<HTMLDivElement>) {
+    const [isPulsing, setIsPulsing] = useState(false);
+
+    const pulse = (duration: number) => {
+        if(isPulsing) return;
+        if(!ref.current) return;
+        setIsPulsing(true);
+        ref.current.classList.add('pulse');
+        setInterval(() => {
+            ref.current?.classList.remove('pulse');
+            setIsPulsing(false);
+        }, duration*1000);
+    }
+    return [pulse];
+}
 
 function MentalNote(props: {mentalNote: MentalNote, allSteps: RecipeStep[], currentInstructionIndex: number}){
+    const ref = useRef<HTMLDivElement>(null);
+    const [pulse] = usePulse(ref);
+    useEffect(() => {
+        pulse(1.5);
+    }, []);
     let pendingInstructionIndex = props.allSteps.findIndex(x => x.id === props.mentalNote.pendingInstructionId);
     if(pendingInstructionIndex === -1){
         console.error(`mental note has a non-existing pending instruction property: id(${props.mentalNote.pendingInstructionId})`);
@@ -18,7 +38,7 @@ function MentalNote(props: {mentalNote: MentalNote, allSteps: RecipeStep[], curr
     else if(pendingInstructionIndex < props.currentInstructionIndex)
         return null;
     return(
-        <div className="mentalNote">
+        <div className="mentalNote" ref={ref}>
             <div className="noteText"><span className="notePrefix">Note: </span>{props.mentalNote.note}</div>
         </div>
     );
@@ -31,6 +51,10 @@ function Timer(props: {timer: Timer, callback: (t: Timer) => any}){
     const [paused, setPaused] = useState(false);
     const [isNotified, setIsNotified] = useState(false);
 
+    const [pulse] = usePulse(timerRef);
+    useEffect(() => {
+        pulse(1.5);
+    }, []);
 
     //This doesn't work for some reason.
     const url = getAudioUrl('10 seconds left on a timer', {
@@ -99,10 +123,15 @@ function Timer(props: {timer: Timer, callback: (t: Timer) => any}){
 
 }
 
-function UserFeedback(props: {userFeedback: UserFeedback, callback: (f: UserFeedback) => any}){
 
+function UserFeedback(props: {userFeedback: UserFeedback, callback: (f: UserFeedback) => any}){
+    const elemRef = useRef<HTMLDivElement>(null);
+    const [pulse] = usePulse(elemRef);
+    useEffect(() => {
+        pulse(1.5);
+    }, []);
     return(
-        <div className="userFeedback">
+        <div className="userFeedback" ref={elemRef}>
             <div className="feedbackText">{props.userFeedback.note}</div>
             <button onClick={() => props.callback(props.userFeedback)} className="userFeedbackBtn">{props.userFeedback.command}</button>
         </div>
@@ -141,7 +170,7 @@ export default function RecipeGuide(){
     const sidebarRef = useRef<HTMLDivElement>(null);
     const location = useLocation();
     const history = useHistory();
-    const [recipe, setRecipe] = useState(location.state as Recipe);
+    const [recipe] = useState(location.state as Recipe);
     const [currentStep, setCurrentStep] = useState(0);
     const [mentalNotes, setMentalNotes] = useState(Array<MentalNote>());
     const [timers, setTimers] = useState(Array<Timer>());
@@ -410,7 +439,6 @@ export default function RecipeGuide(){
         }
 
         if(isDependent(f.pendingInstructionId, currentStep)){
-            setIsBlocked(true);
             //TODO this will fail if the user can't scroll further than the feedback-starting instruction because
             //it'll get started again then. It's also just not desirable to have multiple awaiters point to the
             //same instruction currently, because they'll all have to wait until the last one finishes before 

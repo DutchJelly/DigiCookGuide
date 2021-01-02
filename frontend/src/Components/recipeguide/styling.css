@@ -295,12 +295,35 @@ button:focus{
     opacity: 0.8;
 }
 
+button.disabled {
+    color: rgb(187, 187, 187);
+}
+
+button.disabled:hover {
+    opacity: 1;
+    cursor: default;
+}
 
 .animate {
     animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
     transform: translate3d(0, 0, 0);
     backface-visibility: hidden;
     perspective: 1000px;
+}
+
+.pulse {
+    animation-iteration-count: infinite;
+    animation-name: pulse;
+    animation-duration: 0.25s;
+}
+
+@keyframes pulse {
+    0%,100% {
+        background-color: white;
+    }
+    50% {
+        background-color: orange;
+    }
 }
 
 @keyframes shake {

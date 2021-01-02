@@ -2,12 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import reportWebVitals from './reportWebVitals';
 import RecipeGuide from './Components/recipeguide/RecipeGuide';
-import { BrowserRouter, BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import './assets/main.css'
 import RecipePicker from './Components/recipepicker/RecipePicker';
 import RecipeSettings from './Components/recipesettings/RecipeSettings';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 ReactDOM.render(
   <Router>

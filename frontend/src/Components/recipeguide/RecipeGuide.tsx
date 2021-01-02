@@ -3,7 +3,7 @@ import React, {useState, useEffect, useRef} from 'react'
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 import { useLocation, useHistory } from 'react-router-dom'
 import useSound from 'use-sound'
-import { getAudioUrl, getAudioBase64 } from 'google-tts-api'
+import { getAudioUrl } from 'google-tts-api'
 import DisableableBtn from '../util/DisableableBtn'
 
 import './styling.css'
@@ -16,10 +16,10 @@ function usePulse(ref: React.RefObject<HTMLDivElement>) {
         if(!ref.current) return;
         setIsPulsing(true);
         ref.current.classList.add('pulse');
-        setInterval(() => {
+        setInterval(() => { //This'll leak if the component is unmounted while this is running. TODO fix that.
             ref.current?.classList.remove('pulse');
             setIsPulsing(false);
-        }, duration*1000);
+        }, duration*1000); 
     }
     return [pulse];
 }
@@ -105,7 +105,6 @@ function Timer(props: {timer: Timer, callback: (t: Timer) => any}){
         s -= m*60;
         let h = Math.floor(m/60);
         m -= h*60;
-        let timeString = '';
         if(h) return `${h}:${m < 10 ? '0': ''}${m}:${s < 10 ? '0' : ''}${s}`;
         if(m) return `${m}:${s < 10 ? '0' : ''}${s}`;
         return `${s}`;
@@ -173,8 +172,8 @@ export default function RecipeGuide(){
     const [recipe] = useState(location.state as Recipe);
     const [currentStep, setCurrentStep] = useState(0);
     const [mentalNotes, setMentalNotes] = useState(Array<MentalNote>());
-    const [timers, setTimers] = useState(Array<Timer>());
-    const [feedbacks, setFeedbacks] = useState(Array<UserFeedback>());
+    let [timers, setTimers] = useState(Array<Timer>());
+    let [feedbacks, setFeedbacks] = useState(Array<UserFeedback>());
     const [isBlocked, setIsBlocked] = useState(false);
 
     const [voiceEnabled, setVoiceEnabled] = useState(true);
@@ -280,6 +279,9 @@ export default function RecipeGuide(){
     }
 
     const isDependent = (instructionId: number, lastExecutedInstructionIndex: number) => {
+        console.log(`direct dep: ${isDirectlyDependent(instructionId, lastExecutedInstructionIndex)}
+        feedback dep: ${isFeedbackDependent(instructionId, lastExecutedInstructionIndex)}
+        timer dep: ${isTimerDependant(instructionId, lastExecutedInstructionIndex)}`);
         return isDirectlyDependent(instructionId, lastExecutedInstructionIndex) || isFeedbackDependent(instructionId, lastExecutedInstructionIndex) || isTimerDependant(instructionId, lastExecutedInstructionIndex);
     }
 
@@ -430,9 +432,10 @@ export default function RecipeGuide(){
     }
 
     const handleFeedback = (f: UserFeedback) => {
-        setIsBlocked(false);
         let pendingInstructionIndex = steps.findIndex(x => x.id === f.pendingInstructionId);
-        setFeedbacks(feedbacks.filter(x => x !== f));
+        setIsBlocked(false);
+        feedbacks = feedbacks.filter(x => x !== f);
+        setFeedbacks(feedbacks);
         if(pendingInstructionIndex === -1) {
             console.error(`no pending instruction was found for id ${f.pendingInstructionId}`);
             return;
@@ -443,6 +446,7 @@ export default function RecipeGuide(){
             //it'll get started again then. It's also just not desirable to have multiple awaiters point to the
             //same instruction currently, because they'll all have to wait until the last one finishes before 
             //the pending instruction can be shown.
+            console.log('is dependent');
             return;
         }
 

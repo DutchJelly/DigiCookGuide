@@ -6,8 +6,9 @@ import './styling.css';
 let recipes = [{
   name: 'Cous Cous met gehaktballetjes',
   author: 'Jelle Keulemans',
+  difficulty: 3,
   steps: [{
-    instruction: 'Snij de ui in kleine stukjes.',
+    instruction: 'Snij de ui in kleine stukjes voor door het gehakt. Snij dit dus extra fijn!',
     id: 1,
     dependsOn: [1],
     image: 'https://imagesvc.meredithcorp.io/v3/mm/image?q=85&c=sc&poi=face&url=https%3A%2F%2Fimg1.cookinglight.timeinc.net%2Fsites%2Fdefault%2Ffiles%2Fstyles%2F4_3_horizontal_-_1200x900%2Fpublic%2Fimage%2F2018%2F02%2Fmain%2Fcutting-onions.jpg%3Fitok%3D0kUr7Npt%261518453901',
@@ -15,7 +16,7 @@ let recipes = [{
     timers: [],
     feedbacks: []
   }, {
-    instruction: 'Voeg de ui en kruiden toe aan het gehakt',
+    instruction: 'Voeg de ui, eieren en kruiden toe aan het gehakt.',
     id: 2,
     dependsOn: [1],
     image: 'https://imagesvc.meredithcorp.io/v3/mm/image?q=85&c=sc&poi=face&url=https%3A%2F%2Fimg1.cookinglight.timeinc.net%2Fsites%2Fdefault%2Ffiles%2Fstyles%2F4_3_horizontal_-_1200x900%2Fpublic%2Fimage%2F2018%2F02%2Fmain%2Fcutting-onions.jpg%3Fitok%3D0kUr7Npt%261518453901',
@@ -23,7 +24,7 @@ let recipes = [{
     timers: [],
     feedbacks: []
   }, {
-    instruction: 'Maak de balletjes',
+    instruction: 'Maak de balletjes. Het moeten redelijk kleine balletjes worden voor door een saus.',
     id: 3,
     dependsOn: [2],
     image: 'https://imagesvc.meredithcorp.io/v3/mm/image?q=85&c=sc&poi=face&url=https%3A%2F%2Fimg1.cookinglight.timeinc.net%2Fsites%2Fdefault%2Ffiles%2Fstyles%2F4_3_horizontal_-_1200x900%2Fpublic%2Fimage%2F2018%2F02%2Fmain%2Fcutting-onions.jpg%3Fitok%3D0kUr7Npt%261518453901',
@@ -31,7 +32,7 @@ let recipes = [{
     timers: [],
     feedbacks: []
   }, {
-    instruction: 'Doe de balletjes in pan met wat olie.',
+    instruction: 'Doe de balletjes in een (hete) bakpan met wat olie. Het vuur mag dus redelijk hoog staan.',
     id: 4,
     dependsOn: [3],
     image: 'https://imagesvc.meredithcorp.io/v3/mm/image?q=85&c=sc&poi=face&url=https%3A%2F%2Fimg1.cookinglight.timeinc.net%2Fsites%2Fdefault%2Ffiles%2Fstyles%2F4_3_horizontal_-_1200x900%2Fpublic%2Fimage%2F2018%2F02%2Fmain%2Fcutting-onions.jpg%3Fitok%3D0kUr7Npt%261518453901',
@@ -40,22 +41,38 @@ let recipes = [{
     feedbacks: [{
       command: 'baking finished',
       note: 'Bak de balletjes goudbruin. Het hoeft niet helemaal gaar te zijn al.',
-      pendingInstructionId: 5,
+      pendingInstructionId: 11,
       important: true,
     }]
   }, {
-    instruction: 'Doe de groenten en tomatensaus bij de balletjes in de pan.',
+    instruction: 'Zet het vuur wat lager zodat de balletjes niet te veel verder bakken terwijl je de volgende stappen doet.',
+    id: 11,
+    dependsOn: [11],
+    image: 'https://imagesvc.meredithcorp.io/v3/mm/image?q=85&c=sc&poi=face&url=https%3A%2F%2Fimg1.cookinglight.timeinc.net%2Fsites%2Fdefault%2Ffiles%2Fstyles%2F4_3_horizontal_-_1200x900%2Fpublic%2Fimage%2F2018%2F02%2Fmain%2Fcutting-onions.jpg%3Fitok%3D0kUr7Npt%261518453901',
+    mentalNotes: [],
+    timers: [],
+    feedbacks: []
+  }, {
+    instruction: 'Doe de groenten en tomatenpuree/tomatenblokjes bij de balletjes in de pan. Zet het vuur hierbij ook weer wat hoger.',
     id: 5,
-    dependsOn: [6],
+    dependsOn: [6, 11],
     image: 'https://imagesvc.meredithcorp.io/v3/mm/image?q=85&c=sc&poi=face&url=https%3A%2F%2Fimg1.cookinglight.timeinc.net%2Fsites%2Fdefault%2Ffiles%2Fstyles%2F4_3_horizontal_-_1200x900%2Fpublic%2Fimage%2F2018%2F02%2Fmain%2Fcutting-onions.jpg%3Fitok%3D0kUr7Npt%261518453901',
     mentalNotes: [],
     timers: [],
     feedbacks: [{
       command: 'baking finished',
       note: 'Laat alles lekker pruttelen tot de courget gaar is. Roer soms even door de pan.',
-      pendingInstructionId: 10,
+      pendingInstructionId: 12,
       important: true,
     }]
+  }, {
+    instruction: 'De saus is klaar! Zet het vuur dus uit en zorg dat het niet te veel afkoelt voor het serveren.',
+    id: 12,
+    dependsOn: [12],
+    image: 'https://imagesvc.meredithcorp.io/v3/mm/image?q=85&c=sc&poi=face&url=https%3A%2F%2Fimg1.cookinglight.timeinc.net%2Fsites%2Fdefault%2Ffiles%2Fstyles%2F4_3_horizontal_-_1200x900%2Fpublic%2Fimage%2F2018%2F02%2Fmain%2Fcutting-onions.jpg%3Fitok%3D0kUr7Npt%261518453901',
+    mentalNotes: [],
+    timers: [],
+    feedbacks: []
   }, {
     instruction: 'Breng wat water aan de kook voor de cous cous. Kijk op het cous cous pakje hoeveel water er nodig zal zijn.',
     id: 7,
@@ -70,7 +87,7 @@ let recipes = [{
       important: true,
     }]
   }, {
-    instruction: 'Snij alle groentes.',
+    instruction: 'Snij de courget en paprika in blokjes.',
     id: 6,
     dependsOn: [6],
     image: 'https://imagesvc.meredithcorp.io/v3/mm/image?q=85&c=sc&poi=face&url=https%3A%2F%2Fimg1.cookinglight.timeinc.net%2Fsites%2Fdefault%2Ffiles%2Fstyles%2F4_3_horizontal_-_1200x900%2Fpublic%2Fimage%2F2018%2F02%2Fmain%2Fcutting-onions.jpg%3Fitok%3D0kUr7Npt%261518453901',
@@ -78,7 +95,7 @@ let recipes = [{
     timers: [],
     feedbacks: []
   }, {
-    instruction: 'Voeg het kokende water toe aan de cous cous.',
+    instruction: 'Voeg het kokende water toe aan de cous cous. Er hoeft geen vuur meer aan te staan onder de cous cous pan of bak.',
     id: 8,
     dependsOn: [8],
     image: 'https://imagesvc.meredithcorp.io/v3/mm/image?q=85&c=sc&poi=face&url=https%3A%2F%2Fimg1.cookinglight.timeinc.net%2Fsites%2Fdefault%2Ffiles%2Fstyles%2F4_3_horizontal_-_1200x900%2Fpublic%2Fimage%2F2018%2F02%2Fmain%2Fcutting-onions.jpg%3Fitok%3D0kUr7Npt%261518453901',
@@ -91,7 +108,7 @@ let recipes = [{
     }],
     feedbacks: []
   }, {
-    instruction: 'Giet de cous cous af als er nog water in zit.',
+    instruction: 'Giet de cous cous af als er nog water in zit. Doe (zo nodig) de deksel op de pan zodat het niet koud wordt!',
     id: 9,
     dependsOn: [8],
     image: 'https://imagesvc.meredithcorp.io/v3/mm/image?q=85&c=sc&poi=face&url=https%3A%2F%2Fimg1.cookinglight.timeinc.net%2Fsites%2Fdefault%2Ffiles%2Fstyles%2F4_3_horizontal_-_1200x900%2Fpublic%2Fimage%2F2018%2F02%2Fmain%2Fcutting-onions.jpg%3Fitok%3D0kUr7Npt%261518453901',
@@ -101,7 +118,7 @@ let recipes = [{
   }, {
     instruction: 'Serveer',
     id: 10,
-    dependsOn: [9, 5],
+    dependsOn: [9, 12],
     image: 'https://imagesvc.meredithcorp.io/v3/mm/image?q=85&c=sc&poi=face&url=https%3A%2F%2Fimg1.cookinglight.timeinc.net%2Fsites%2Fdefault%2Ffiles%2Fstyles%2F4_3_horizontal_-_1200x900%2Fpublic%2Fimage%2F2018%2F02%2Fmain%2Fcutting-onions.jpg%3Fitok%3D0kUr7Npt%261518453901',
     mentalNotes: [],
     timers: [],

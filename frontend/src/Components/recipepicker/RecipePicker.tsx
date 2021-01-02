@@ -39,30 +39,27 @@ let recipes = [{
     timers: [],
     feedbacks: [{
       command: 'baking finished',
-      note: 'Bak de balletjes goudbruin.',
+      note: 'Bak de balletjes goudbruin. Het hoeft niet helemaal gaar te zijn al.',
       pendingInstructionId: 5,
       important: true,
     }]
   }, {
-    instruction: 'Doe de groenten en tomatensaus bij de balletjes in de pan',
+    instruction: 'Doe de groenten en tomatensaus bij de balletjes in de pan.',
     id: 5,
     dependsOn: [6],
     image: 'https://imagesvc.meredithcorp.io/v3/mm/image?q=85&c=sc&poi=face&url=https%3A%2F%2Fimg1.cookinglight.timeinc.net%2Fsites%2Fdefault%2Ffiles%2Fstyles%2F4_3_horizontal_-_1200x900%2Fpublic%2Fimage%2F2018%2F02%2Fmain%2Fcutting-onions.jpg%3Fitok%3D0kUr7Npt%261518453901',
     mentalNotes: [],
     timers: [],
-    feedbacks: []
+    feedbacks: [{
+      command: 'baking finished',
+      note: 'Laat alles lekker pruttelen tot de courget gaar is. Roer soms even door de pan.',
+      pendingInstructionId: 10,
+      important: true,
+    }]
   }, {
-    instruction: 'Snij alle groentes.',
-    id: 6,
-    dependsOn: [5],
-    image: 'https://imagesvc.meredithcorp.io/v3/mm/image?q=85&c=sc&poi=face&url=https%3A%2F%2Fimg1.cookinglight.timeinc.net%2Fsites%2Fdefault%2Ffiles%2Fstyles%2F4_3_horizontal_-_1200x900%2Fpublic%2Fimage%2F2018%2F02%2Fmain%2Fcutting-onions.jpg%3Fitok%3D0kUr7Npt%261518453901',
-    mentalNotes: [],
-    timers: [],
-    feedbacks: []
-  }, {
-    instruction: 'Zet de waterkoker aan.',
+    instruction: 'Breng wat water aan de kook voor de cous cous. Kijk op het cous cous pakje hoeveel water er nodig zal zijn.',
     id: 7,
-    dependsOn: [7],
+    dependsOn: [4],
     image: 'https://imagesvc.meredithcorp.io/v3/mm/image?q=85&c=sc&poi=face&url=https%3A%2F%2Fimg1.cookinglight.timeinc.net%2Fsites%2Fdefault%2Ffiles%2Fstyles%2F4_3_horizontal_-_1200x900%2Fpublic%2Fimage%2F2018%2F02%2Fmain%2Fcutting-onions.jpg%3Fitok%3D0kUr7Npt%261518453901',
     mentalNotes: [],
     timers: [],
@@ -72,6 +69,14 @@ let recipes = [{
       pendingInstructionId: 8,
       important: true,
     }]
+  }, {
+    instruction: 'Snij alle groentes.',
+    id: 6,
+    dependsOn: [6],
+    image: 'https://imagesvc.meredithcorp.io/v3/mm/image?q=85&c=sc&poi=face&url=https%3A%2F%2Fimg1.cookinglight.timeinc.net%2Fsites%2Fdefault%2Ffiles%2Fstyles%2F4_3_horizontal_-_1200x900%2Fpublic%2Fimage%2F2018%2F02%2Fmain%2Fcutting-onions.jpg%3Fitok%3D0kUr7Npt%261518453901',
+    mentalNotes: [],
+    timers: [],
+    feedbacks: []
   }, {
     instruction: 'Voeg het kokende water toe aan de cous cous.',
     id: 8,

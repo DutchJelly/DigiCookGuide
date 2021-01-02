@@ -149,7 +149,7 @@ export default function RecipeGuide(){
     const [isBlocked, setIsBlocked] = useState(false);
 
     const [voiceEnabled, setVoiceEnabled] = useState(true);
-    const [voiceFeedback, setVoiceFeedback] = useState("");
+    const [voiceFeedback, setVoiceFeedback] = useState('');
     const [executedCmd, setExecutedCmd] = useState('');
     
     const idleImage = 'https://imagesvc.meredithcorp.io/v3/mm/image?q=85&c=sc&poi=face&w=2000&h=1047&url=https%3A%2F%2Fstatic.onecms.io%2Fwp-content%2Fuploads%2Fsites%2F19%2F2018%2F04%2F05%2FGettyImages-607041431-2000.jpg';
@@ -403,9 +403,18 @@ export default function RecipeGuide(){
     const handleFeedback = (f: UserFeedback) => {
         setIsBlocked(false);
         let pendingInstructionIndex = steps.findIndex(x => x.id === f.pendingInstructionId);
+        setFeedbacks(feedbacks.filter(x => x !== f));
         if(pendingInstructionIndex === -1) {
             console.error(`no pending instruction was found for id ${f.pendingInstructionId}`);
-            setFeedbacks(feedbacks.filter(x => x !== f));
+            return;
+        }
+
+        if(isDependent(f.pendingInstructionId, currentStep)){
+            setIsBlocked(true);
+            //TODO this will fail if the user can't scroll further than the feedback-starting instruction because
+            //it'll get started again then. It's also just not desirable to have multiple awaiters point to the
+            //same instruction currently, because they'll all have to wait until the last one finishes before 
+            //the pending instruction can be shown.
             return;
         }
 
@@ -413,9 +422,7 @@ export default function RecipeGuide(){
         //Or if the current instruction is the one that actually started the feedback awaiting.
         if(isBlocked || steps[currentStep].feedbacks.includes(f)){
             insertStep(pendingInstructionIndex, currentStep+1);
-            setCurrentStep(currentStep+1);   
-            setFeedbacks(feedbacks.filter(x => x !== f));
-            
+            setCurrentStep(currentStep+1);
             return;
         }
        
@@ -423,7 +430,6 @@ export default function RecipeGuide(){
             insertStep(pendingInstructionIndex, currentStep);
         else 
             insertStep(pendingInstructionIndex, currentStep+1);        
-        setFeedbacks(feedbacks.filter(x => x !== f));
     }
 
 

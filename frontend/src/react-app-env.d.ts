@@ -29,14 +29,19 @@ interface RecipeStep {
     feedbacks: UserFeedback[] //instructions that depend on user feedback
 }
 
-
+interface RecipeIngredient {
+    nameSingle: string,
+    namePlural: string | undefined,
+    amount: number
+}
 
 interface Recipe {
     name: string,
     steps: RecipeStep[],
-    ingredients: string[],
+    ingredients: RecipeIngredient[],
     author: string,
     difficulty: number,
+    amount: number,
 }
 
 interface RefObject<T> {

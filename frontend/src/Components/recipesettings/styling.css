@@ -1,5 +1,5 @@
 .settingscontainer{
-    width: 70%;
+    width: 60%;
     min-width: 700px;
     margin: 0 auto;
     padding-bottom: 4rem;
@@ -11,6 +11,7 @@
     letter-spacing: 0.2rem;
     text-align: center;
     margin: 1rem;
+    z-index: 1;
 }
 
 .step {
@@ -58,7 +59,7 @@
     top: 0;
     left: 0;
     background-color: white;
-    z-index: 1;
+    z-index: 2;
     display: flex; 
     justify-content: center;
     align-items: center;
@@ -107,4 +108,49 @@
 
 .settingscontainer .cookBtn:hover {
     opacity: 0.8;
+}
+
+.settingscontainer .ingredientcontainer {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 0.4rem;
+    width: 400px;
+    padding: 0 1rem 1rem 1rem;
+    background-color: white;
+}
+
+.ingredientcontainer h1 {
+    font-size: 1.5rem;
+}
+
+.ingredientcontainer ul {
+    list-style-type: disc;
+    list-style-position: inside;
+}
+
+.ingredientcontainer .amountcontainer {
+    width: 50%;
+    margin: 1rem auto 0 auto;
+    display: flex;
+    flex-direction: row;
+}
+
+.amountcontainer button {
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    background-color: rgb(2, 54, 0);
+    border-radius: 20px;
+    color: white;
+    font-size: 1.7rem;
+
+}
+
+.amountcontainer .amountdisplay {
+    flex: 1;
+    text-align: center;
+    font-size: 1.2rem;
+    line-height: 40px;
 }

@@ -3,8 +3,44 @@ import { useHistory, withRouter } from 'react-router-dom';
 import './styling.css';
 
 
+
 let recipes = [{
-  name: 'Cous Cous met gehaktballetjes',
+  amount: 1,
+  ingredients: [{
+    nameSingle: '_ gram gehakt',
+    amount: 250 
+  }, {
+    nameSingle: '_ grote ui',
+    namePlural: '_ grote uien',
+    amount: 1 
+  }, {
+    nameSingle: '_ courgette',
+    namePlural: '_ courgettes',
+    amount: 1 
+  }, {
+    nameSingle: '_ rode paprika',
+    namePlural: '_ rode paprikas',
+    amount: 1 
+  }, {
+    nameSingle: '_ tomaat',
+    namePlural: '_ tomaten',
+    amount: 2 
+  }, {
+    nameSingle: '_ eetlepel tomatenpuree',
+    namePlural: '_ eetlepels tomatenpuree',
+    amount: 2 
+  }, {
+    nameSingle: '_ theelepel canjunkruiden',
+    namePlural: '_ theelepels canjunkruiden',
+    amount: 2 
+  }, {
+    nameSingle: '_ gram couscous',
+    amount: 125
+  }, {
+    nameSingle: 'olie of boter om in te bakken',
+    amount: 1
+  }],
+  name: 'couscous met gehaktballetjes',
   author: 'Jelle Keulemans',
   difficulty: 3,
   steps: [{
@@ -74,7 +110,7 @@ let recipes = [{
     timers: [],
     feedbacks: []
   }, {
-    instruction: 'Breng wat water aan de kook voor de cous cous. Kijk op het cous cous pakje hoeveel water er nodig zal zijn.',
+    instruction: 'Breng wat water aan de kook voor de couscous. Kijk op het couscous pakje hoeveel water er nodig zal zijn.',
     id: 7,
     dependsOn: [4],
     image: 'https://imagesvc.meredithcorp.io/v3/mm/image?q=85&c=sc&poi=face&url=https%3A%2F%2Fimg1.cookinglight.timeinc.net%2Fsites%2Fdefault%2Ffiles%2Fstyles%2F4_3_horizontal_-_1200x900%2Fpublic%2Fimage%2F2018%2F02%2Fmain%2Fcutting-onions.jpg%3Fitok%3D0kUr7Npt%261518453901',
@@ -95,20 +131,20 @@ let recipes = [{
     timers: [],
     feedbacks: []
   }, {
-    instruction: 'Voeg het kokende water toe aan de cous cous. Er hoeft geen vuur meer aan te staan onder de cous cous pan of bak.',
+    instruction: 'Voeg het kokende water toe aan de couscous. Er hoeft geen vuur meer aan te staan onder de couscous pan of bak.',
     id: 8,
     dependsOn: [8],
     image: 'https://imagesvc.meredithcorp.io/v3/mm/image?q=85&c=sc&poi=face&url=https%3A%2F%2Fimg1.cookinglight.timeinc.net%2Fsites%2Fdefault%2Ffiles%2Fstyles%2F4_3_horizontal_-_1200x900%2Fpublic%2Fimage%2F2018%2F02%2Fmain%2Fcutting-onions.jpg%3Fitok%3D0kUr7Npt%261518453901',
     mentalNotes: [],
     timers: [{
-      note: 'Laat de cous cous weken',
+      note: 'Laat de couscous weken',
       durationSeconds: 300,
       pendingInstructionId: 9,
       important: true,
     }],
     feedbacks: []
   }, {
-    instruction: 'Giet de cous cous af als er nog water in zit. Doe (zo nodig) de deksel op de pan zodat het niet koud wordt!',
+    instruction: 'Giet de couscous af als er nog water in zit. Doe (zo nodig) de deksel op de pan zodat het niet koud wordt!',
     id: 9,
     dependsOn: [8],
     image: 'https://imagesvc.meredithcorp.io/v3/mm/image?q=85&c=sc&poi=face&url=https%3A%2F%2Fimg1.cookinglight.timeinc.net%2Fsites%2Fdefault%2Ffiles%2Fstyles%2F4_3_horizontal_-_1200x900%2Fpublic%2Fimage%2F2018%2F02%2Fmain%2Fcutting-onions.jpg%3Fitok%3D0kUr7Npt%261518453901',
@@ -128,6 +164,7 @@ let recipes = [{
   
   
   {
+    amount: 1,
     name: 'spaghetti carbonara',
     steps: [{
         instruction: 'Zet een pan die ongeveer 3/4 gevuld is met water op het vuur.',

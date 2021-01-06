@@ -229,6 +229,10 @@ export default function RecipeGuide(){
         }
         else SpeechRecognition.stopListening();
     }, [voiceEnabled]);
+
+    useEffect(() => {
+        dragElement(document.getElementById("ingredientContainer") as HTMLDivElement)
+    }, [])
     
     const {transcript, resetTranscript} = useSpeechRecognition({commands: staticCommands});
 
@@ -464,6 +468,7 @@ export default function RecipeGuide(){
             insertStep(pendingInstructionIndex, currentStep+1);        
     }
 
+    const [ingredientsCollapsed, setIngredientsCollapsed] = useState(false);
 
     return(
         <div className="guide">
@@ -492,6 +497,20 @@ export default function RecipeGuide(){
                     {mentalNotes.map((note, i) => <MentalNote key={i} mentalNote={note} allSteps={steps} currentInstructionIndex={currentStep}/>)}
                 </div>
             </div>
+            
+            <div className="ingredientcontainer" id="ingredientContainer">
+                <button className="minimise" onClick={(e) => {
+                    document.getElementById('ingredientContainer')?.classList.toggle('collapsed');
+                    setIngredientsCollapsed(!ingredientsCollapsed);   
+                }}>{ingredientsCollapsed ? 'maximise' : 'minimise'}</button>
+                <h1>Ingredients</h1>
+                <ul>
+                    {recipe.ingredients.map((ingredient, i) => 
+                        <li key={i}>{(ingredient.amount > 1 && ingredient.namePlural ? ingredient.namePlural : ingredient.nameSingle).replaceAll('_', ingredient.amount.toString())}</li>
+                    )}
+                </ul>
+            </div>
+
 
             <div className="main">
                 <div className="instructions" style={{gridArea: "instructions"}}>
@@ -522,3 +541,40 @@ export default function RecipeGuide(){
     );
 
 } 
+
+
+function dragElement(elmnt: HTMLDivElement) {
+    var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+
+    elmnt.onmousedown = dragMouseDown;
+  
+    function dragMouseDown(e: MouseEvent) {
+      e = e || window.event;
+      e.preventDefault();
+      // get the mouse cursor position at startup:
+      pos3 = e.clientX;
+      pos4 = e.clientY;
+      document.onmouseup = closeDragElement;
+      // call a function whenever the cursor moves:
+      document.onmousemove = elementDrag;
+    }
+  
+    function elementDrag(e: MouseEvent) {
+      e = e || window.event;
+      e.preventDefault();
+      // calculate the new cursor position:
+      pos1 = pos3 - e.clientX;
+      pos2 = pos4 - e.clientY;
+      pos3 = e.clientX;
+      pos4 = e.clientY;
+      // set the element's new position:
+      elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+      elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+    }
+  
+    function closeDragElement() {
+      // stop moving when mouse button is released:
+      document.onmouseup = null;
+      document.onmousemove = null;
+    }
+  }

@@ -317,7 +317,7 @@ button.disabled:hover {
     padding: 0 1rem 1rem 1rem;
     background-color: white;
     cursor: grab;
-
+    z-index: 5;
 }
 
 .ingredientcontainer.collapsed {
@@ -331,6 +331,7 @@ button.disabled:hover {
     margin-left: -1rem;
     font-style: italic;
     border-bottom-right-radius: 0.4rem;
+    border-top-left-radius: 0.4rem;
     padding: 0.4rem;
     background-color: rgb(2, 54, 0);
     color: white;

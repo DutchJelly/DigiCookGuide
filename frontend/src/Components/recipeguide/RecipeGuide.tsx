@@ -200,6 +200,28 @@ export default function RecipeGuide(){
                 setExecutedCmd('previous');
             },
             matchInterim: true
+        },{
+            command: "minimise",
+            callback: () => {
+                if(ingredientsCollapsed) return;
+                resetTranscript();
+                document.getElementById('ingredientContainer')?.classList.toggle('collapsed');
+                setIngredientsCollapsed(!ingredientsCollapsed); 
+                setExecutedCmd('');
+                setExecutedCmd('minimise');
+            },
+            matchInterim: true
+        },{
+            command: "maximise",
+            callback: () => {
+                if(!ingredientsCollapsed) return;
+                resetTranscript();
+                document.getElementById('ingredientContainer')?.classList.toggle('collapsed');
+                setIngredientsCollapsed(!ingredientsCollapsed);  
+                setExecutedCmd('');
+                setExecutedCmd('maximise');
+            },
+            matchInterim: true
         }
     ];
 
@@ -499,7 +521,7 @@ export default function RecipeGuide(){
             </div>
             
             <div className="ingredientcontainer" id="ingredientContainer">
-                <button className="minimise" onClick={(e) => {
+                <button className="minimise" onClick={() => {
                     document.getElementById('ingredientContainer')?.classList.toggle('collapsed');
                     setIngredientsCollapsed(!ingredientsCollapsed);   
                 }}>{ingredientsCollapsed ? 'maximise' : 'minimise'}</button>
@@ -542,7 +564,7 @@ export default function RecipeGuide(){
 
 } 
 
-
+//Directly copied code from w3schools.
 function dragElement(elmnt: HTMLDivElement) {
     var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
 
